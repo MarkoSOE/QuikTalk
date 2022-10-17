@@ -10,7 +10,7 @@ const flash = require("express-flash");
 const logger = require("morgan");
 const connectDB = require("./config/database");
 const mainRoutes = require("./routes/main");
-// const messageRoutes = require("./routes/messages");
+const messageRoutes = require("./routes/messages");
 
 //Use .env file in config folder
 require("dotenv").config({ path: "./config/.env" });
@@ -58,10 +58,10 @@ app.use(passport.session());
 app.use(flash());
 
 //Setup Routes For Which The Server Is Listening
-app.use("/", mainRoutes);
-// app.use("/message", messageRoutes);
+// app.use("/", mainRoutes);
+app.use("/message", messageRoutes);
 
 //Server Running
-app.listen(process.env.PORT || 5000, () => {
+app.listen(3000, () => {
   console.log("Server is running, you better catch it!");
 });
