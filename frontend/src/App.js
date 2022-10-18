@@ -26,8 +26,8 @@ const App = () => {
         <Link to='/signup'> signup </Link>
       </h2>
       <Routes>
-        <Route path="/login" element={<Login />}/>
-        <Route path="/signup" element={<Signup />}/>
+        <Route path="/login" element={<Login />} exact/>
+        <Route path="/signup" element={<Signup />} exact/>
       </Routes>
     </div>
 )}
