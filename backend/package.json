@@ -1,7 +1,7 @@
 {
   "name": "quiktalk",
   "version": "1.0.0",
-  "proxy": "http://localhost:5000",
+  "proxy": "http://localhost:3001",
   "description": "Messaging App",
   "main": "server.js",
   "scripts": {
