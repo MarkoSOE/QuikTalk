@@ -1,0 +1,14 @@
+.grid-container{
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+}
+.conversation-list{
+    background-color: #ae2a2a;
+    height: 300px;
+    padding: 20px;
+}
+.conversation-focus{
+    background-color: #4a5a9e;
+    height: 300px;
+    padding: 20px;
+}

@@ -1,4 +1,3 @@
-import React, {useState, useEffect} from "react";
 import './App.css'
 import {
   Routes,
@@ -8,25 +7,14 @@ import {
 
 import Login from './components/Login'
 import Signup from './components/Signup'
-
+import MainPage from './components/MainPage'
 
 const App = () => {
   return (
     <div>
-      <h1>
-        Sign in
-      </h1>
-      <h2>
-        New Here? <Link to='/signup'> Create an Account! </Link>
-      </h2>
-      <h2>
-        <Link to='/login'> Login </Link>
-      </h2>
-      <h2>
-        <Link to='/signup'> signup </Link>
-      </h2>
       <Routes>
-        <Route path="/login" element={<Login />} exact/>
+        <Route path='/' element={<Login />} />
+        <Route path="/homepage" element={<MainPage />} exact/>
         <Route path="/signup" element={<Signup />} exact/>
       </Routes>
     </div>
