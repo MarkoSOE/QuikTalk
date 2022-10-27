@@ -2,11 +2,11 @@ const mongoose = require('mongoose')
 const bcrypt = require('bcrypt')
 
 const UserSchema = new mongoose.Schema({
-    firstName : {
+    firstname : {
         type: String,
         required: true,
     },
-    lastName : {
+    lastname : {
         type: String,
         required: true,
     },
@@ -18,13 +18,9 @@ const UserSchema = new mongoose.Schema({
         type: String,
         required: true,
     },
-    profilepicture: {
-        type: String,
-        default: "insertcloudinarystringhere"
-    },
     userStatus : {
         type: String,
-        default: false
+        default: "offline",
     },
     
     lastOnline: Date,
@@ -60,5 +56,5 @@ UserSchema.methods.comparePassword = function comparePassword(candidatePassword,
     })
 }
 
-module.exports = mongoose.model(user)
+module.exports = mongoose.model('User', UserSchema)
   
