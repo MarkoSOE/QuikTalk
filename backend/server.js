@@ -17,7 +17,7 @@ const PORT = process.env.PORT || 3001
 require("dotenv").config({ path: "./config/.env" });
 
 // Passport config
-// require("./config/passport")(passport);
+require("./config/passport")(passport);
 
 app.use(cors())
 

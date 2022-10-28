@@ -13,9 +13,45 @@
   ```
 */
 import React from 'react'
+import axios from 'axios'
+import { useState, useEffect } from 'react'
 import { LockClosedIcon } from '@heroicons/react/20/solid'
 
+
 export default function Example() {
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: ''
+  })
+  const { email, password } = formData
+
+  const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+
+  const onSubmit = async e => {
+    e.preventDefault()
+    console.log(formData)
+    const newUser = {
+      email, 
+      password
+    }
+    try {
+     const config = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+     }
+     const body = JSON.stringify(newUser);
+      await axios.post('/login', body, config)
+      .then(res => {
+        console.log(res.data)
+        window.location.href = '/homepage'
+      })
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
   return (
     <>
       {/*
@@ -45,7 +81,7 @@ export default function Example() {
               </a>
             </p>
           </div>
-          <form className="mt-8 space-y-6" action="#" method="POST">
+          <form className="mt-8 space-y-6" onSubmit={onSubmit} method="POST">
             <input type="hidden" name="remember" defaultValue="true" />
             <div className="-space-y-px rounded-md shadow-sm">
               <div>
@@ -60,6 +96,7 @@ export default function Example() {
                   required
                   className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="Email address"
+                  onChange={onChange}
                 />
               </div>
               <div>
@@ -74,6 +111,7 @@ export default function Example() {
                   required
                   className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                   placeholder="Password"
+                  onChange={onChange}
                 />
               </div>
             </div>

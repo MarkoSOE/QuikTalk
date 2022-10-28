@@ -11,38 +11,28 @@ const User = require("../models/User");
 //   });
 // };
 
-// exports.postLogin = (req, res, next) => {
-//   const validationErrors = [];
-//   if (!validator.isEmail(req.body.email))
-//     validationErrors.push({ msg: "Please enter a valid email address." });
-//   if (validator.isEmpty(req.body.password))
-//     validationErrors.push({ msg: "Password cannot be blank." });
+exports.postLogin = (req, res, next) => {
+  req.body.email = validator.normalizeEmail(req.body.email, {
+    gmail_remove_dots: false,
+  });
 
-//   if (validationErrors.length) {
-//     req.flash("errors", validationErrors);
-//     return res.redirect("/login");
-//   }
-//   req.body.email = validator.normalizeEmail(req.body.email, {
-//     gmail_remove_dots: false,
-//   });
+  //authenticate with passport
 
-//   passport.authenticate("local", (err, user, info) => {
-//     if (err) {
-//       return next(err);
-//     }
-//     if (!user) {
-//       req.flash("errors", info);
-//       return res.redirect("/login");
-//     }
-//     req.logIn(user, (err) => {
-//       if (err) {
-//         return next(err);
-//       }
-//       req.flash("success", { msg: "Success! You are logged in." });
-//       res.redirect(req.session.returnTo || "/profile");
-//     });
-//   })(req, res, next);
-// };
+  passport.authenticate("local", (err, user, info) => {
+    if (err) {
+      return next(err);
+    }
+    if (!user) {
+      return res.status(400).json(info);
+    }
+    req.logIn(user, (err) => {
+      if (err) {
+        return next(err);
+      }
+      return res.status(200).json('success')  
+    });
+  })(req, res, next);
+};
 
 // exports.logout = (req, res) => {
 //   req.logout(() => {
@@ -67,17 +57,46 @@ const User = require("../models/User");
 
 exports.postSignup = async (req, res, next) => {
   try {
-    const user = new User({
-        firstname: req.body.firstname,
-        lastname: req.body.lastname,
-        email: req.body.email,
-        password: req.body.password,
-      });
-    const createdUser = await user.save();
-    return res.send(createdUser)
+    let { firstname, lastname, email, password, confirmpassword } = req.body;
+    const validationErrors = []
+
+    const foundUser = await User.findOne({ email: email });
+    
+    if(foundUser){
+      validationErrors.push({msg: 'User with this email already exists'})
+    }
+    if(password !== confirmpassword){
+      validationErrors.push({msg: "Passwords do not match"})
+    }
+    if (validationErrors.length) {
+      return res.status(502).json(validationErrors);
+    }
+
+    email = validator.normalizeEmail(email, {
+      gmail_remove_dots: false,
+    });
+    
+
+    const user = await User.create({
+      firstname,
+      lastname,
+      email,
+      password
+    });
+
+    if(user){
+      res.status(201).json({
+        _id: user._id,
+        firstName: user.firstname,
+        lastName: user.lastname,
+        email: user.email
+      })
+    } else {
+      return res.status(400).json('Error adding user')
+    }
+
   } catch (err) {
-    console.log(err);
-    res.status(500).send(err);
+   console.error(err) 
   }
   // try {
   //   const validationErrors = [];

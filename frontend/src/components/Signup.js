@@ -24,9 +24,10 @@ const Signup = () => {
         firstname: '',
         lastname: '',
         email: '',
-        password: ''
+        password: '',
+        confirmpassword: ''
     })
-    const { firstname, lastname, email, password } = formData
+    const { firstname, lastname, email, password, confirmpassword } = formData
 
     const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
 
@@ -37,7 +38,8 @@ const Signup = () => {
             firstname,
             lastname,
             email,
-            password
+            password,
+            confirmpassword
         }
         try {
             const config = {
@@ -46,10 +48,13 @@ const Signup = () => {
                 }
             }
             const body = JSON.stringify(newUser)
-            const res = await axios.post('/signup', body, config)
-            console.log(res.data)
-        } catch (err) {
-            console.error(err.response.data)
+            await axios.post('/signup', body, config)
+            .then(res => {
+                console.log(res.data)
+                window.location.href = '/'
+            })
+        } catch (error) {      
+            console.log(error.res.data);      
         }
     }
     return (
@@ -142,6 +147,7 @@ const Signup = () => {
                                 required
                                 className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                                 placeholder="Confirm Password"
+                                onChange={onChange}
                                 />
                             </div>
                         </div>
