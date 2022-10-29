@@ -4,6 +4,8 @@ import {
   Route,
   Link
 } from 'react-router-dom'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 import Login from './components/Login'
 import Signup from './components/Signup'
