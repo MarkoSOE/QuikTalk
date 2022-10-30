@@ -2,7 +2,7 @@ import { useState } from 'react'
 import axios from 'axios'
 
 import '../styles/mainpage.css'
-import CreateAChat from './CreateAChat'
+import CreateAChat from '../components/CreateAChat'
 
 const MainPage = () => {
 

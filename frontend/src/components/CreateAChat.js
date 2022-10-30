@@ -2,24 +2,52 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from "axios";
+import ChatDropDown from './Modal/Chatdropdown'
+import { UseQueryClient } from 'react-query'
 
 
 
 const CreateAChat = () => {
 
+    const queryClient = UseQueryClient()
+
     const [show, setShow] = useState(false);
     const handleClose =() => setShow(false);
-    // const handleShow = () => setShow(true);
+    const handleShow = () => setShow(true);
 
-    //this will hold all the users we obtain from the backend
-    const[users, setUsers] = useState([]);
+    const [users, setUsers] = useState([]);
+    const [groupChatName, setGroupChatName] = useState('');
+    const [filterName, setFilterName] = useState('');
+    const [selectedUsers, setSelectedUsers] = useState([]);
+    const [searchQuery, setSearchQuery] = useState('');
+    const [searchQueryResults, setSearchQueryResults] = useState([]);
 
-    const handleUsersChange = (e) => {
-        setUsers(e.target.value)
+    //submit conversation to backend
+    const handleSubmit = async (e) => {
+        console.log("submitting data to server")
+        
     }
 
-    //want to access all the users in the database and store their information in an array
-    
+    const handlefilterName = (e) => {
+        setFilterName(e.target.value)
+    }
+
+    const handleGroupChatName = (e) => {
+        setGroupChatName(e.target.value)
+    }
+
+    const addtoSelectedUsers = (e) => {
+        e.preventDefault()
+        console.log(e.target.value)
+    }
+
+    const removeSelectedUser = (e) => {
+        e.preventDefault()
+        console.log(e.target.value)
+    }
+
+
+    //want to access all the users in the database and store their information in the users array
     const getUsers = async () => {
         setShow(true);
         try {
@@ -48,22 +76,39 @@ const CreateAChat = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <form>
-                        <label>
-                            GroupChat Name:
-                            <input type="text" name="name" />
-                        </label>
-                        <label> 
-                            Select Users:
-                            <input type="text" name="addUsers" onChange={handleUsersChange}/>
-                        </label>
+                        <input type="text" name="groupChatName" onChange={handleGroupChatName} placeholder= "Group Chat Name"/>
+                        <input type="text" name="addUsers" onChange={handlefilterName} placeholder= "Add users: e.g. Marko, Lisa, etc"/>
                     </form>
-                    {/* Here we're going to display all the users listed when the user types for users */}
-                    <div className="displayUsers" style={{"height": "399px"}}>
-                    
-                    </div>
+                    {/* Here we're going to display fultered users listed when the user types for users */}
+                    {/* <ChatDropDown users={users} filterName={filterName}/> */}
+                    <ul className="list-group">
+                        {searchQuery !== '' && searchQueryResults?.slice(0, 6).map((user, index) => {
+                            return (
+                                <>
+                                    <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
+                                        <div>
+                                            <span> 
+                                                {user.firstname} 
+                                                {user.lastname}
+                                            </span>
+                                        </div>
+                                        <span className={user.status==="offline" ? "badge bg-secondary bg-pill" : "badge bg-success bg-pill"} onClick={addtoSelectedUsers(user)}>14</span>
+                                    </li>
+                                </>
+                            )
+                        })}
+                    </ul>
+                    {selectedUsers.length > 0 && selectedUsers.map((user, index) => {
+                        return (
+                            <span>
+                                {user.firstname} {user.lastname}
+                                <Button onClick={() => removeSelectedUser(user)}> remove </Button>
+                            </span>
+                        )
+                    })}
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleClose}>
+                    <Button variant="primary" onClick={handleSubmit}>
                         Create Chat
                     </Button>
                     <Button variant="secondary" onClick={handleClose}>
