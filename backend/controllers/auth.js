@@ -11,6 +11,15 @@ const User = require("../models/User");
 //   });
 // };
 
+exports.getUsers = async (req, res) => {
+  try {
+    const users = await User.find().sort({ createdAt: -1 }).lean();
+    res.send(users);
+  } catch (error) {
+    console.log(error);
+  }
+}
+
 exports.postLogin = (req, res, next) => {
   req.body.email = validator.normalizeEmail(req.body.email, {
     gmail_remove_dots: false,
@@ -97,58 +106,4 @@ exports.postSignup = async (req, res, next) => {
 
   } catch (err) {
    console.error(err) 
-  }
-  // try {
-  //   const validationErrors = [];
-  //   if (!validator.isEmail(req.body.email))
-  //     validationErrors.push({ msg: "Please enter a valid email address." });
-  //   if (!validator.isLength(req.body.password, { min: 8 }))
-  //     validationErrors.push({
-  //       msg: "Password must be at least 8 characters long",
-  //     });
-  //   if (req.body.password !== req.body.confirmPassword)
-  //     validationErrors.push({ msg: "Passwords do not match" });
-  
-  //   if (validationErrors.length) {
-  //     req.flash("errors", validationErrors);
-  //     return res.status(400);
-  //   }
-  //   req.body.email = validator.normalizeEmail(req.body.email, {
-  //     gmail_remove_dots: false,
-  //   });
-  
-  //   const user = new User({
-  //     userName: req.body.userName,
-  //     email: req.body.email,
-  //     password: req.body.password,
-  //   });
-  
-  //   User.findOne(
-  //     { $or: [{ email: req.body.email }, { userName: req.body.userName }] },
-  //     (err, existingUser) => {
-  //       if (err) {
-  //         return next(err);
-  //       }
-  //       if (existingUser) {
-  //         req.flash("errors", {
-  //           msg: "Account with that email address or username already exists.",
-  //         });
-  //         return res.status(300).send("Account with that email address or username already exists.");
-  //       }
-  //       user.save((err) => {
-  //         if (err) {
-  //           return next(err);
-  //         }
-  //         req.logIn(user, (err) => {
-  //           if (err) {
-  //             return next(err);
-  //           }
-  //         });
-  //       });
-  //     }
-  //   );
-  // } catch (error) {
-  //   console.log(error);
-  //   res.status(500).send("Server Error");
-  // }
-};
+  }};

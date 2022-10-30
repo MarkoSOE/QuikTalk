@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import axios from "axios";
 
 
 
@@ -8,19 +9,31 @@ const CreateAChat = () => {
 
     const [show, setShow] = useState(false);
     const handleClose =() => setShow(false);
-    const handleShow = () => setShow(true);
+    // const handleShow = () => setShow(true);
 
-    const[users, setUsers] = useState('');
+    //this will hold all the users we obtain from the backend
+    const[users, setUsers] = useState([]);
 
     const handleUsersChange = (e) => {
         setUsers(e.target.value)
-        console.log(e.target.value)
     }
+
+    //want to access all the users in the database and store their information in an array
     
+    const getUsers = async () => {
+        setShow(true);
+        try {
+            const res = await axios.get('/users')
+            setUsers(res.data)
+            console.log(res.data)
+        } catch (error) {
+            console.error(error)
+        }
+    }
 
     return (
         <>
-            <Button variant="primary" onClick={handleShow}>
+            <Button variant="primary" onClick={getUsers}>
                 Create GroupChat
             </Button>
 
