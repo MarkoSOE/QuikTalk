@@ -1,6 +1,7 @@
 const passport = require("passport");
 const validator = require("validator");
 const User = require("../models/User");
+const mongoose = require("mongoose");
 
 // exports.getLogin = (req, res) => {
 //   if (req.user) {
@@ -10,6 +11,19 @@ const User = require("../models/User");
 //     title: "Login",
 //   });
 // };
+
+//get a single user that matches the ID being passed in
+exports.getSingularUser = async (req,res) => {
+  console.log(req.params.id)
+  //go through the collection and find the user with the matching firsname
+  try {
+    const user = await User.find({firstname: req.params.id}).lean()
+    console.log(user)
+    res.send(user)
+  } catch (error) {
+    console.log(error)
+  }
+}
 
 exports.getUsers = async (req, res) => {
   try {

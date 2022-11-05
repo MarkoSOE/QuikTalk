@@ -2,6 +2,8 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from "axios";
+import { useQueryClient } from 'react-query'
+
 
 
 
@@ -12,14 +14,17 @@ const CreateAChat = () => {
     // const handleShow = () => setShow(true);
 
     //this will hold all the users we obtain from the backend
-    const[users, setUsers] = useState([]);
+    const[groupChatName, setGroupChatName] = useState('')
+    const[selectedUsers, setSelectedUsers] = useState([])
+    const[searchQuery, setSearchQuery] = useState("")
+    const[searchQueryResults, setSearchQueryResults] = useState([])
+    const[users, setUsers] = useState([])
+    const[filter, setFilter] = useState('')
 
     const handleUsersChange = (e) => {
-        setUsers(e.target.value)
+        setFilter(e.target.value)
     }
-
     //want to access all the users in the database and store their information in an array
-    
     const getUsers = async () => {
         setShow(true);
         try {
@@ -30,6 +35,30 @@ const CreateAChat = () => {
             console.error(error)
         }
     }
+
+    const handleSearch = async(input) => {
+        console.log(input)
+        setSearchQuery(input)
+        if(!input){
+            return
+        }
+        try {
+            const data = await axios.get(`/${searchQuery}`)
+
+            setSearchQueryResults(data)
+            console.log(searchQueryResults)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const addtoSelectedUsers = (user) => {
+        if(addtoSelectedUsers.includes(user)){
+            return
+        }
+        setSelectedUsers([...selectedUsers, user])
+    }
+    //add the selected user to the list of addUsers
 
     return (
         <>
@@ -47,20 +76,43 @@ const CreateAChat = () => {
                     <Modal.Title>Create a GroupChat</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form>
-                        <label>
-                            GroupChat Name:
-                            <input type="text" name="name" />
-                        </label>
-                        <label> 
-                            Select Users:
-                            <input type="text" name="addUsers" onChange={handleUsersChange}/>
-                        </label>
-                    </form>
-                    {/* Here we're going to display all the users listed when the user types for users */}
-                    <div className="displayUsers" style={{"height": "399px"}}>
-                    
-                    </div>
+                    <input
+                        className="group-chat-input"
+                        type="text"
+                        placeholder="Group chat name"
+                        value={groupChatName}
+                        onChange={(e) => setGroupChatName(e.target.value)}
+                        >
+                    </input>
+
+                    <input
+                        className="group-chat-input"
+                        type="text"
+                        placeholder="Add users e.g: Sam, Leon, etc."
+                        onChange={(e) => handleSearch(e.target.value)}
+                        >
+                    </input>
+
+                    {/* <ul className="group-chat-user-finder-container">
+                    {searchQueryResults.map((user, index) => {
+                        return (
+                        <li key={index} className="online-user-wrapper">
+                            <div className="user-status-info">
+                            <span className="user-status-name">
+                                {user.firstName} {user.lastName}
+                            </span>
+
+                            <span className="user-status-subtitle">New User</span>
+                            </div>
+                            <span className="user-status-online-indicator grey"></span>
+                            <div
+                            className="invisible-search-wrapper"
+                            id={user}
+                            onClick={() => addtoSelectedUsers(user)}
+                            ></div>
+                        </li>);
+                        })}
+                    </ul> */}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" onClick={handleClose}>
