@@ -4,12 +4,11 @@ import {
   Route,
   Link
 } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css';
 
 
-import Login from './components/Login'
-import Signup from './components/Signup'
-import MainPage from './components/MainPage'
+import Login from './pages/Login'
+import Signup from './pages/Signup'
+import MainPage from './pages/MainPage'
 
 const App = () => {
   return (
