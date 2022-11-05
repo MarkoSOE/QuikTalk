@@ -17,34 +17,9 @@ const CreateAChat = () => {
 
     const [users, setUsers] = useState([]);
     const [groupChatName, setGroupChatName] = useState('');
-    const [filterName, setFilterName] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
     const [searchQuery, setSearchQuery] = useState('');
     const [searchQueryResults, setSearchQueryResults] = useState([]);
-
-    //submit conversation to backend
-    const handleSubmit = async (e) => {
-        console.log("submitting data to server")
-        
-    }
-
-    const handlefilterName = (e) => {
-        setFilterName(e.target.value)
-    }
-
-    const handleGroupChatName = (e) => {
-        setGroupChatName(e.target.value)
-    }
-
-    const addtoSelectedUsers = (e) => {
-        e.preventDefault()
-        console.log(e.target.value)
-    }
-
-    const removeSelectedUser = (e) => {
-        e.preventDefault()
-        console.log(e.target.value)
-    }
 
 
     //want to access all the users in the database and store their information in the users array
@@ -75,8 +50,8 @@ const CreateAChat = () => {
         }
     }
 
-    const addtoSelectedUsers = (user) => {
-        if(addtoSelectedUsers.includes(user)){
+    const addToSelectedUsers = (user) => {
+        if(addToSelectedUsers.includes(user)){
             return
         }
         setSelectedUsers([...selectedUsers, user])
@@ -99,40 +74,47 @@ const CreateAChat = () => {
                     <Modal.Title>Create a GroupChat</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <form>
-                        <input type="text" name="groupChatName" onChange={handleGroupChatName} placeholder= "Group Chat Name"/>
-                        <input type="text" name="addUsers" onChange={handlefilterName} placeholder= "Add users: e.g. Marko, Lisa, etc"/>
-                    </form>
-                    {/* Here we're going to display fultered users listed when the user types for users */}
-                    {/* <ChatDropDown users={users} filterName={filterName}/> */}
-                    <ul className="list-group">
+                    <div className='container'>
+                        <h1 className="modal-title">Create Group Chat</h1>
+                        <input
+                        className="group-chat-input"
+                        type="text"
+                        placeholder="Group chat name"
+                        value={groupChatName}
+                        onChange={(e) => setGroupChatName(e.target.value)}
+                        ></input>
+
+                        <input
+                        className="group-chat-input"
+                        type="text"
+                        placeholder="Add users e.g: Sam, Leon, etc."
+                        onChange={(e) => handleSearch(e.target.value)}
+                        ></input>
+                        <ul className="group-chat-user-finder-container">
                         {searchQuery !== '' && searchQueryResults?.slice(0, 6).map((user, index) => {
                             return (
-                                <>
-                                    <li key={index} className="list-group-item d-flex justify-content-between align-items-center">
-                                        <div>
-                                            <span> 
-                                                {user.firstname} 
-                                                {user.lastname}
-                                            </span>
-                                        </div>
-                                        <span className={user.status==="offline" ? "badge bg-secondary bg-pill" : "badge bg-success bg-pill"} onClick={addtoSelectedUsers(user)}>14</span>
-                                    </li>
-                                </>
-                            )
+                            <li key={index} className="online-user-wrapper">
+                                <div className="user-status-info">
+                                <span className="user-status-name">
+                                    {user?.firstName} {user?.lastName}
+                                </span>
+
+                                <span className="user-status-subtitle">New User</span>
+                                </div>
+                                <span className="user-status-online-indicator grey"></span>
+                                <div
+                                className="invisible-search-wrapper"
+                                id={user}
+                                onClick={() => addToSelectedUsers(user)}
+                                ></div>
+                            </li>
+                            );
                         })}
-                    </ul>
-                    {selectedUsers.length > 0 && selectedUsers.map((user, index) => {
-                        return (
-                            <span>
-                                {user.firstname} {user.lastname}
-                                <Button onClick={() => removeSelectedUser(user)}> remove </Button>
-                            </span>
-                        )
-                    })}
+                        </ul>
+                    </div>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" onClick={handleSubmit}>
+                    <Button variant="primary" >
                         Create Chat
                     </Button>
                     <Button variant="secondary" onClick={handleClose}>
