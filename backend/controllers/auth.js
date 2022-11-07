@@ -14,10 +14,9 @@ const mongoose = require("mongoose");
 
 //get a single user that matches the ID being passed in
 exports.getSingularUser = async (req,res) => {
-  console.log(req.params.id)
-  //go through the collection and find the user with the matching firsname
   try {
-    const user = await User.find({firstname: req.params.id}).lean()
+    // const user = await User.find({firstname: req.params.id}).lean()
+    const user = await User.find({firstname: 'Marko'})
     console.log(user)
     res.send(user)
   } catch (error) {
@@ -26,6 +25,7 @@ exports.getSingularUser = async (req,res) => {
 }
 
 exports.getUsers = async (req, res) => {
+  console.log('getting all users')
   try {
     const users = await User.find().sort({ createdAt: -1 }).lean();
     res.send(users);

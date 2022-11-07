@@ -2,14 +2,13 @@ import React, { useState, useEffect } from "react";
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import axios from "axios";
-import ChatDropDown from './Modal/Chatdropdown'
 import { UseQueryClient } from 'react-query'
 
 
 
 const CreateAChat = () => {
 
-    const queryClient = UseQueryClient()
+    // const queryClient = UseQueryClient()
 
     const [show, setShow] = useState(false);
     const handleClose =() => setShow(false);
@@ -41,7 +40,9 @@ const CreateAChat = () => {
             return
         }
         try {
-            const data = await axios.get(`/${searchQuery}`)
+            const data = await axios.get(`/singleuser`, {
+                params : {firstName : searchQuery}
+            })
 
             setSearchQueryResults(data)
             console.log(searchQueryResults)
@@ -90,7 +91,7 @@ const CreateAChat = () => {
                         placeholder="Add users e.g: Sam, Leon, etc."
                         onChange={(e) => handleSearch(e.target.value)}
                         ></input>
-                        <ul className="group-chat-user-finder-container">
+                        {/* <ul className="group-chat-user-finder-container">
                         {searchQuery !== '' && searchQueryResults?.slice(0, 6).map((user, index) => {
                             return (
                             <li key={index} className="online-user-wrapper">
@@ -110,7 +111,7 @@ const CreateAChat = () => {
                             </li>
                             );
                         })}
-                        </ul>
+                        </ul> */}
                     </div>
                 </Modal.Body>
                 <Modal.Footer>
