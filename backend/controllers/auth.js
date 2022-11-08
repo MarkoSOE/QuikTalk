@@ -15,10 +15,22 @@ const mongoose = require("mongoose");
 //get a single user that matches the ID being passed in
 exports.getSingularUser = async (req,res) => {
   try {
-    // const user = await User.find({firstname: req.params.id}).lean()
-    const user = await User.find({firstname: 'Marko'})
-    console.log(user)
-    res.send(user)
+    const keyword = req.query.firstName ? {
+      $or : [
+        {firstname: {$regex: req.query.firstName, $options: "i"}},
+        {lastname: {$regex: req.query.firstName, $options: "i"}},
+      ],
+    } : {};
+
+    const users = await User.find(keyword).find({
+      _id: {$ne: req.user._id},
+    })
+    res.send(users)
+
+    // // const user = await User.find({firstname: req.query.firstName.toLowerCase()}).lean()
+    // const user = await User.fuzzySearch({firstname: req.query.firstName.toLowerCase()})
+    // console.log(user)
+    // res.send(user)
   } catch (error) {
     console.log(error)
   }

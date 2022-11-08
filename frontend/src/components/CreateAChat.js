@@ -17,8 +17,17 @@ const CreateAChat = () => {
     const [users, setUsers] = useState([]);
     const [groupChatName, setGroupChatName] = useState('');
     const [selectedUsers, setSelectedUsers] = useState([]);
+    
     const [searchQuery, setSearchQuery] = useState('');
     const [searchQueryResults, setSearchQueryResults] = useState([]);
+
+    useEffect(() => {
+        let searchResults;
+        if(searchQuery){
+            searchResults = singleSearch(searchQuery)
+        }
+        setSearchQueryResults(searchResults)
+    }, [searchQuery])
 
 
     //want to access all the users in the database and store their information in the users array
@@ -33,22 +42,19 @@ const CreateAChat = () => {
         }
     }
 
-    const handleSearch = async(input) => {
-        console.log(input)
-        setSearchQuery(input)
-        if(!input){
-            return
-        }
+    const singleSearch = async(search) =>{
         try {
             const data = await axios.get(`/singleuser`, {
-                params : {firstName : searchQuery}
+                params : {firstName : search}
             })
-
-            setSearchQueryResults(data)
-            console.log(searchQueryResults)
+            return data
         } catch (error) {
             console.log(error)
         }
+    }
+
+    const handleSearch = async(input) => {
+        setSearchQuery(input)
     }
 
     const addToSelectedUsers = (user) => {
@@ -61,6 +67,7 @@ const CreateAChat = () => {
 
     return (
         <>
+            <React.StrictMode>
             <Button variant="primary" onClick={getUsers}>
                 Create GroupChat
             </Button>
@@ -89,7 +96,7 @@ const CreateAChat = () => {
                         className="group-chat-input"
                         type="text"
                         placeholder="Add users e.g: Sam, Leon, etc."
-                        onChange={(e) => handleSearch(e.target.value)}
+                        onChange={(e) => handleSearch(e.target.value.toLowerCase())}
                         ></input>
                         {/* <ul className="group-chat-user-finder-container">
                         {searchQuery !== '' && searchQueryResults?.slice(0, 6).map((user, index) => {
@@ -123,6 +130,7 @@ const CreateAChat = () => {
                     </Button>
                 </Modal.Footer>
             </Modal>
+            </React.StrictMode>
         </>
     )
 }

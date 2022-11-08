@@ -29,7 +29,7 @@ const Signup = () => {
     })
     const { firstname, lastname, email, password, confirmpassword } = formData
 
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value })
+    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value.toLowerCase() })
 
     const onSubmit = async e => {
         e.preventDefault()
