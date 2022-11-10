@@ -21,6 +21,10 @@ const CreateAChat = () => {
     const [searchQuery, setSearchQuery] = useState('');
     const [searchQueryResults, setSearchQueryResults] = useState([]);
 
+    // useEffect(() => {
+    //     setSearchQueryResults([])
+    // }, [searchQuery])
+
     useEffect(() => {
         let searchResults;
         if(searchQuery){
@@ -44,10 +48,11 @@ const CreateAChat = () => {
 
     const singleSearch = async(search) =>{
         try {
-            const data = await axios.get(`/singleuser`, {
+            const req = await axios.get(`/singleuser`, {
                 params : {firstName : search}
             })
-            return data
+            console.log(req.data)
+            return req.data
         } catch (error) {
             console.log(error)
         }
@@ -98,8 +103,9 @@ const CreateAChat = () => {
                         placeholder="Add users e.g: Sam, Leon, etc."
                         onChange={(e) => handleSearch(e.target.value.toLowerCase())}
                         ></input>
+                        <button onClick={()=> console.log(searchQueryResults)}> show state</button>
                         {/* <ul className="group-chat-user-finder-container">
-                        {searchQuery !== '' && searchQueryResults?.slice(0, 6).map((user, index) => {
+                        {searchQuery !== '' && searchQueryResults?.map((user, index) => {
                             return (
                             <li key={index} className="online-user-wrapper">
                                 <div className="user-status-info">

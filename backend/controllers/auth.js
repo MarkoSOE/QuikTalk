@@ -26,6 +26,7 @@ exports.getSingularUser = async (req,res) => {
       _id: {$ne: req.user._id},
     })
     res.send(users)
+    console.log(users)
 
     // // const user = await User.find({firstname: req.query.firstName.toLowerCase()}).lean()
     // const user = await User.fuzzySearch({firstname: req.query.firstName.toLowerCase()})
