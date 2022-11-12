@@ -11,6 +11,7 @@ const logger = require("morgan");
 const connectDB = require("./config/database");
 const mainRoutes = require("./routes/main");
 const messageRoutes = require("./routes/messages");
+const conversationRoutes = require("./routes/conversation")
 const PORT = process.env.PORT || 3001
 // const messageRoutes = require("./routes/messages");
 
@@ -62,6 +63,7 @@ app.use(flash());
 //Setup Routes For Which The Server Is Listening
 app.use("/", mainRoutes);
 app.use("/message", messageRoutes);
+app.use('/conversation', conversationRoutes)
 
 //Server Running
 app.listen(PORT, () => {

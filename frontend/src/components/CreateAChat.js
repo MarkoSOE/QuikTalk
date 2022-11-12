@@ -25,13 +25,13 @@ const CreateAChat = () => {
     //     setSearchQueryResults([])
     // }, [searchQuery])
 
-    useEffect(() => {
-        let searchResults;
-        if(searchQuery){
-            searchResults = singleSearch(searchQuery)
-        }
-        setSearchQueryResults(searchResults)
-    }, [searchQuery])
+    // useEffect(() => {
+    //     let searchResults;
+    //     if(searchQuery){
+    //         searchResults = singleSearch(searchQuery)
+    //     }
+    //     setSearchQueryResults(searchResults)
+    // }, [searchQuery])
 
 
     //want to access all the users in the database and store their information in the users array
@@ -46,29 +46,51 @@ const CreateAChat = () => {
         }
     }
 
-    const singleSearch = async(search) =>{
-        try {
-            const req = await axios.get(`/singleuser`, {
-                params : {firstName : search}
-            })
-            console.log(req.data)
-            return req.data
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    // const singleSearch = async(search) =>{
+    //     try {
+    //         const req = await axios.get(`/singleuser`, {
+    //             params : {firstName : search}
+    //         })
+    //         console.log(req.data)
+    //         return req.data
+    //     } catch (error) {
+    //         console.log(error)
+    //     }
+    // }
 
+    // const handleSearch = async(input) => {
+    //     setSearchQuery(input)
+    // }
     const handleSearch = async(input) => {
-        setSearchQuery(input)
-    }
+        setSearchQuery(input);
+        if (!input) {
+          return; //False value
+        }
+    
+        try {
+          const req = await axios.get(`/singleuser`, {
+            params : {firstName : input}
+        })
+          setSearchQueryResults(req.data)
+        } catch (error) {
+          console.log(error)
+        }
+      };
 
     const addToSelectedUsers = (user) => {
-        if(addToSelectedUsers.includes(user)){
+        if(selectedUsers.includes(user)){
             return
         }
         setSelectedUsers([...selectedUsers, user])
     }
-    //add the selected user to the list of addUsers
+    
+    const removeSelectedUser = (userToRemove) => {
+        setSelectedUsers(selectedUsers.filter((user) => user !== userToRemove))
+    }
+
+    const createConversation = () => {
+
+    }
 
     return (
         <>
@@ -103,17 +125,14 @@ const CreateAChat = () => {
                         placeholder="Add users e.g: Sam, Leon, etc."
                         onChange={(e) => handleSearch(e.target.value.toLowerCase())}
                         ></input>
-                        <button onClick={()=> console.log(searchQueryResults)}> show state</button>
-                        {/* <ul className="group-chat-user-finder-container">
+                        <ul className="group-chat-user-finder-container">
                         {searchQuery !== '' && searchQueryResults?.map((user, index) => {
                             return (
                             <li key={index} className="online-user-wrapper">
                                 <div className="user-status-info">
                                 <span className="user-status-name">
-                                    {user?.firstName} {user?.lastName}
+                                    {user?.firstname} {user?.lastname}
                                 </span>
-
-                                <span className="user-status-subtitle">New User</span>
                                 </div>
                                 <span className="user-status-online-indicator grey"></span>
                                 <div
@@ -124,8 +143,23 @@ const CreateAChat = () => {
                             </li>
                             );
                         })}
-                        </ul> */}
+                        </ul>
                     </div>
+                    { selectedUsers.length > 0 && <div className="selected-users-container">
+                        {selectedUsers.map((user, index) => {
+                            return (
+                                <span className="selected-user" key={index}>
+                                    {user.firstname} {user.lastname}
+                                    <button 
+                                        className="selected-user-delete-btn"
+                                        onClick={() => removeSelectedUser(user)}
+                                        >
+                                    </button>
+                                </span>
+                            )
+                        })}
+                        </div>
+                    }
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="primary" >
