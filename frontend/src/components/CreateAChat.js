@@ -89,7 +89,12 @@ const CreateAChat = () => {
     }
 
     const createConversation = () => {
-
+        const newConversation = {
+            chatname: groupChatName,
+            isgroupchat: selectedUsers.length > 1 && true,
+            users: selectedUsers,
+            
+        }
     }
 
     return (
