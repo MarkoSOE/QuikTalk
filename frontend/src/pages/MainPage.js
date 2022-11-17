@@ -2,7 +2,9 @@ import { useState } from 'react'
 import axios from 'axios'
 
 import '../styles/mainpage.css'
-import CreateAChat from '../components/CreateAChat'
+import CreateAChat from '../components/SideBar/CreateAChat'
+import SideBar from '../components/SideBar'
+import ChatView from '../components/ChatView'
 
 const MainPage = () => {
 
@@ -41,27 +43,8 @@ const MainPage = () => {
 
   return (
     <main className="grid-container">
-        <article className="conversation-list">
-            This is a test
-            <div className='container'>
-                    <div className="messages">Messages:</div>
-                    <CreateAChat />
-                    <div className="find-chat">Find a user to chat with</div>
-                    <div className="conversations">Conversations</div>
-            </div>
-        </article>
-        <article className="conversation-focus">
-            This is another test
-            <div className='container'>
-                <div className='current-conversation'></div>
-                <div className='message-input'>
-                    <form onSubmit={messageSubmit} method={'POST'}>
-                        <input type='text' onChange={handlemessageChange} placeholder='Type a message...'></input>
-                        <button type='submit'>Send</button>
-                    </form>
-                </div>
-            </div>
-        </article>
+        <SideBar />
+        <ChatView messageSubmit={messageSubmit} handlemessageChange={handlemessageChange} />
     </main>
   )
 }

@@ -88,12 +88,19 @@ const CreateAChat = () => {
         setSelectedUsers(selectedUsers.filter((user) => user !== userToRemove))
     }
 
-    const createConversation = () => {
-        const newConversation = {
-            chatname: groupChatName,
-            isgroupchat: selectedUsers.length > 1 && true,
+    const createConversation = async(e) => {
+        e.preventDefault()
+        if(!groupChatName || !selectedUsers){
+            return
         }
-        const req = axios.get('/')
+        try {
+            const {data} = await axios.post('/conversation/createConvo', {
+                name: groupChatName,
+                users: JSON.stringify(selectedUsers.map(user => user._id ))
+            })
+        } catch (error) {
+            console.error(error)
+        }
     }
 
     return (
@@ -114,7 +121,6 @@ const CreateAChat = () => {
                 </Modal.Header>
                 <Modal.Body>
                     <div className='container'>
-                        <h1 className="modal-title">Create Group Chat</h1>
                         <input
                         className="group-chat-input"
                         type="text"
@@ -166,7 +172,7 @@ const CreateAChat = () => {
                     }
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="primary" >
+                    <Button variant="primary" onClick={createConversation}>
                         Create Chat
                     </Button>
                     <Button variant="secondary" onClick={handleClose}>
