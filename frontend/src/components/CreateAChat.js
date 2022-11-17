@@ -92,9 +92,8 @@ const CreateAChat = () => {
         const newConversation = {
             chatname: groupChatName,
             isgroupchat: selectedUsers.length > 1 && true,
-            users: selectedUsers,
-            
         }
+        const req = axios.get('/')
     }
 
     return (
