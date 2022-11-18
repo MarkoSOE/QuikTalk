@@ -81,7 +81,8 @@ const SideBar = () => {
 			{showOnline ? (
 				<Messages />
 			) : (
-				<SearchResult loading={loading} data={searchResult} />
+				<div>hehe</div>
+				// <SearchResult loading={loading} data={searchResult} />
 			)}
 		</article>
 	);

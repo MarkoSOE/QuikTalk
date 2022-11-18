@@ -1,54 +1,63 @@
-const Conversation = require('../models/Conversation')
-const Message = require('../models/Message')
+const Conversation = require("../models/Conversation");
+const Message = require("../models/Message");
 
-exports.createConversation = async(req,res) => {
-    //Ensuring required fields are filled
-    if(!req.body.users || !req.body.name){
-        return res.status(400).send({ message: "Please complete all the fields" })
-    }
+exports.createConversation = async (req, res) => {
+	//Ensuring required fields are filled
+	if (!req.body.users || !req.body.name) {
+		return res.status(400).send({ message: "Please complete all the fields" });
+	}
 
-    //getting the list of users within the conversation
-    let convoUsers = JSON.parse(req.body.users)
-    
-    //ensuring proper number of users in a group chat
-    if(convoUsers.length < 2){
-        return res.status(400).send({ message: "Two or more people are required to create a group chat"})
-    }
+	//getting the list of users within the conversation
+	let convoUsers = JSON.parse(req.body.users);
 
-    //adding the user who sent the request into the list of users 
-    convoUsers.push(req.user)
+	//ensuring proper number of users in a group chat
+	if (convoUsers.length < 2) {
+		return res.status(400).send({
+			message: "Two or more people are required to create a group chat",
+		});
+	}
 
-    //creating a new conversation using the conversation model 
-    try {
-        const newConversation = await Conversation.create({
-            chatname: req.body.chatname,
-            isgroupchat: true,
-            users: convoUsers,
-            grouphost: req.user
-        })
-        //looking for the conversation just created 
-        const conversationGroupMembers = await Message.findOne({id: newConversation._id})
-        .populate("users", "-password")
-        .populate("grouphost", "-password")
+	//adding the user who sent the request into the list of users
+	convoUsers.push(req.user);
 
-        res.status(200).JSON(conversationGroupMembers)
-    } catch (error) {
-        console.error(error)
-    }
-    
-    console.log(req)
-    try {
-        await Conversation.create({
-            chatname: req.body.chatname,
-            isgroupchat: req.body.isgroupchat,
-            users: req.body.users,
-            last
+	//creating a new conversation using the conversation model
+	try {
+		const newConversation = await Conversation.create({
+			chatname: req.body.chatname,
+			isgroupchat: true,
+			users: convoUsers,
+			grouphost: req.user,
+		});
+		//looking for the conversation just created
+		const conversationGroupMembers = await Message.findOne({
+			id: newConversation._id,
+		})
+			.populate("users", "-password")
+			.populate("grouphost", "-password");
 
-        })
-        console.log('message created')
-        res.send()
-    } catch (error) {
-        
-    }
-}
+		res.status(200).JSON(conversationGroupMembers);
+	} catch (error) {
+		console.error(error);
+	}
 
+	console.log(req);
+	try {
+		await Conversation.create({
+			chatname: req.body.chatname,
+			isgroupchat: req.body.isgroupchat,
+			users: req.body.users,
+			last,
+		});
+		console.log("message created");
+		res.send();
+	} catch (error) {}
+};
+
+exports.getAllChats = async (req, res) => {
+	try {
+		const messages = await Message.find().sort({ createdAt: "desc" }).lean();
+		res.status(200).JSON(messages);
+	} catch (error) {
+		console.error(error);
+	}
+};
