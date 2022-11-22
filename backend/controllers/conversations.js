@@ -1,5 +1,4 @@
 const Conversation = require("../models/Conversation");
-const Message = require("../models/Message");
 
 exports.createConversation = async (req, res) => {
 	//Ensuring required fields are filled
@@ -53,10 +52,13 @@ exports.createConversation = async (req, res) => {
 	} catch (error) {}
 };
 
-exports.getAllChats = async (req, res) => {
+exports.getAllConversations = async (req, res) => {
 	try {
-		const messages = await Message.find().sort({ createdAt: "desc" }).lean();
-		res.status(200).JSON(messages);
+		const conversations = await Conversation.find()
+			.sort({ createdAt: "desc" })
+			.lean();
+		console.log(conversations);
+		res.status(200).send(conversations);
 	} catch (error) {
 		console.error(error);
 	}

@@ -51,7 +51,7 @@ const SideBar = () => {
 		<article className="conversation-list">
 			This is a test
 			<div className="container">
-				<div className="messages" onclick={openDDMenu}>
+				<div className="messages" onClick={openDDMenu}>
 					Messages:
 				</div>
 				{openDD && (
