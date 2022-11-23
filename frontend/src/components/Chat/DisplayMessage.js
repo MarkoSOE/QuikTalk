@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import * as Scroll from "react-scroll";
 import axios from "axios";
 import ChatContext from "../../ChatContext";
@@ -14,11 +14,20 @@ import {
 
 const DisplayMessage = ({ messages }) => {
 	const { selectedChat, userIsTyping } = useContext(ChatContext);
-
-	//the idea is that we get the current user id from session storage and then we compare it to the sender id of the message
-
-	const currentUser = sessionStorage.getItem("userId");
-	console.log(currentUser);
+	const [currentuser, setCurrentUser] = useState("");
+	//get current user id
+	useState(() => {
+		const getCurrentUser = async () => {
+			try {
+				const { data } = await axios.get("/user/getcurrentuser");
+				console.log(data);
+				setCurrentUser(data);
+			} catch (error) {
+				console.error(error);
+			}
+		};
+		getCurrentUser();
+	}, []);
 
 	const roomID = selectedChat?._id;
 	const IsTyping = userIsTyping[roomID];
