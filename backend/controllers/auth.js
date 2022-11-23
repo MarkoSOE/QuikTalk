@@ -148,3 +148,16 @@ exports.postSignup = async (req, res, next) => {
 		console.error(err);
 	}
 };
+
+exports.getCurrentUser = (req, res) => {
+	if (req.user) {
+		res.status(200).json({
+			_id: req.user._id,
+			firstName: req.user.firstname,
+			lastName: req.user.lastname,
+			email: req.user.email,
+		});
+	} else {
+		res.status(401).json("Unauthorized");
+	}
+};
