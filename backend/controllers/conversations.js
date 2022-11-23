@@ -63,3 +63,12 @@ exports.getAllConversations = async (req, res) => {
 		console.error(error);
 	}
 };
+
+exports.getConversationById = async (req, res) => {
+	try {
+		const conversation = await Conversation.findById(req.params.id).lean();
+		res.status(200).send(conversation);
+	} catch (error) {
+		console.error(error);
+	}
+};

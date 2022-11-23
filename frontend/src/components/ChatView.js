@@ -1,7 +1,7 @@
 import ChatContext from "../ChatContext";
 import { useState, useEffect, useContext } from "react";
 import axios from "axios";
-import DisplayMessage from "./SideBar/DisplayMessage";
+import DisplayMessage from "../components/Chat/DisplayMessage";
 
 var socket, selectedChatCompare;
 

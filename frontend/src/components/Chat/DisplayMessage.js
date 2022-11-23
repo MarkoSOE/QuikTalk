@@ -15,6 +15,11 @@ import {
 const DisplayMessage = ({ messages }) => {
 	const { selectedChat, userIsTyping } = useContext(ChatContext);
 
+	//the idea is that we get the current user id from session storage and then we compare it to the sender id of the message
+
+	const currentUser = sessionStorage.getItem("userId");
+	console.log(currentUser);
+
 	const roomID = selectedChat?._id;
 	const IsTyping = userIsTyping[roomID];
 
