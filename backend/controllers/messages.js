@@ -1,19 +1,31 @@
-const Message = require('../models/Message');
-
+const Message = require("../models/Message");
+const Conversation = require("../models/Conversation");
 
 exports.createMessage = async (req, res) => {
-    // want to insert the message into the message collection
-    console.log(req.body)
-    try {
-        await Message.Create({
-            createdBy: req.user._id,
-            message: req.body.message, 
-            conversationReference: 100
-        })
-        console.log("Message created")
-        return res.status(200)
-    } catch (error) {
-        return res.status(500)
-    }
+	// want to insert the message into the message collection
+	const { message, chatID } = req.body;
 
-}
+	if (!message || !chatID) {
+		console.log("unable to send your message");
+		return res.status(400);
+	}
+
+	let newMessage = {
+		createdby: req.user._id,
+		message: req.body.message,
+		chatref: chatID,
+	};
+
+	console.log(newMessage);
+
+	try {
+		let message = await Message.create(newMessage);
+		await Conversation.findByIdAndUpdate(req.body.chatID, {
+			latestmessage: message,
+		});
+		console.log(message);
+		res.json(message);
+	} catch (error) {
+		throw new Error(error.message);
+	}
+};

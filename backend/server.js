@@ -3,7 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
-const cors = require('cors')
+const cors = require("cors");
 const MongoStore = require("connect-mongo")(session);
 const methodOverride = require("method-override");
 const flash = require("express-flash");
@@ -11,8 +11,8 @@ const logger = require("morgan");
 const connectDB = require("./config/database");
 const mainRoutes = require("./routes/main");
 const messageRoutes = require("./routes/messages");
-const conversationRoutes = require("./routes/conversation")
-const PORT = process.env.PORT || 3001
+const conversationRoutes = require("./routes/conversation");
+const PORT = process.env.PORT || 3001;
 // const messageRoutes = require("./routes/messages");
 
 //Use .env file in config folder
@@ -21,10 +21,15 @@ require("dotenv").config({ path: "./config/.env" });
 // Passport config
 require("./config/passport")(passport);
 
-app.use(cors())
+app.use(
+	cors({
+		origin: "http://locahost:3000",
+		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+		credentials: true,
+	})
+);
 
-
-//Middleware that parses incoming JSON request and puts the data in req.body 
+//Middleware that parses incoming JSON request and puts the data in req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -45,12 +50,12 @@ app.use(methodOverride("_method"));
 
 // Setup Sessions - stored in MongoDB
 app.use(
-  session({
-    secret: "keyboard cat",
-    resave: false,
-    saveUninitialized: false,
-    store: new MongoStore({ mongooseConnection: mongoose.connection }),
-  })
+	session({
+		secret: "keyboard cat",
+		resave: false,
+		saveUninitialized: false,
+		store: new MongoStore({ mongooseConnection: mongoose.connection }),
+	})
 );
 
 // Passport middleware
@@ -63,9 +68,9 @@ app.use(flash());
 //Setup Routes For Which The Server Is Listening
 app.use("/", mainRoutes);
 app.use("/message", messageRoutes);
-app.use('/conversation', conversationRoutes)
+app.use("/conversation", conversationRoutes);
 
 //Server Running
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}, you better catch it!`);
+	console.log(`Server is running on port ${PORT}, you better catch it!`);
 });

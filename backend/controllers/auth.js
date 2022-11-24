@@ -41,7 +41,7 @@ exports.getSingularUser = async (req, res) => {
 
 exports.logout = (req, res) => {
 	req.logout(() => {
-		console.log("Use has logged out");
+		console.log("User has logged out");
 	});
 	req.session.destroy((err) => {
 		if (err) {
@@ -159,5 +159,16 @@ exports.getCurrentUser = (req, res) => {
 		});
 	} else {
 		res.status(401).json("Unauthorized");
+	}
+};
+
+exports.getLoginSuccess = (req, res) => {
+	if (req.user) {
+		res.json({
+			success: true,
+			message: "user has successfully authenticated",
+			user: req.user,
+			cookies: req.cookies,
+		});
 	}
 };
