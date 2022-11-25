@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require("mongoose");
 const passport = require("passport");
 const session = require("express-session");
+const cookieParser = require("cookie-parser");
 const cors = require("cors");
 const MongoStore = require("connect-mongo")(session);
 const methodOverride = require("method-override");
@@ -29,6 +30,7 @@ app.use(
 	})
 );
 
+app.use(cookieParser());
 //Middleware that parses incoming JSON request and puts the data in req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
@@ -55,6 +57,7 @@ app.use(
 		resave: false,
 		saveUninitialized: false,
 		store: new MongoStore({ mongooseConnection: mongoose.connection }),
+		cookie: { secure: true },
 	})
 );
 

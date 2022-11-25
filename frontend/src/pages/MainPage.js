@@ -5,6 +5,7 @@ import "../index.css";
 import SideBar from "../components/SideBar";
 import ChatView from "../components/ChatView";
 import ChatContext from "../ChatContext";
+import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
 	//set up state to contain the message to be sent to the backend
@@ -19,18 +20,6 @@ const MainPage = () => {
 		showEditModal,
 		showUserProfile,
 	} = useContext(ChatContext);
-
-	useEffect(() => {
-		const validateUser = async () => {
-			try {
-				const data = await axios.get("/login/success");
-				console.log(data);
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		validateUser();
-	}, []);
 
 	return (
 		<main className="homepage">

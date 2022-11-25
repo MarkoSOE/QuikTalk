@@ -3,14 +3,14 @@ const validator = require("validator");
 const User = require("../models/User");
 const mongoose = require("mongoose");
 
-// exports.getLogin = (req, res) => {
-//   if (req.user) {
-//     return res.redirect("/profile");
-//   }
-//   res.render("login", {
-//     title: "Login",
-//   });
-// };
+exports.getLogin = (req, res) => {
+	if (req.user) {
+		return res.redirect("/profile");
+	}
+	res.render("login", {
+		title: "Login",
+	});
+};
 
 //get a single user that matches the ID being passed in
 exports.getSingularUser = async (req, res) => {
