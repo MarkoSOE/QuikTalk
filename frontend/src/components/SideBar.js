@@ -4,6 +4,7 @@ import axios from "axios";
 import CreateAChat from "./SideBar/CreateAChat";
 import ChatContext from "../ChatContext";
 import Messages from "./SideBar/Messages";
+import Cookies from "js-cookie";
 
 const SideBar = () => {
 	const { search, setSearch, setShowModal, setSelectedChat } =
@@ -17,17 +18,11 @@ const SideBar = () => {
 
 	const navigate = useNavigate();
 
-	//userinfo
+	//uerinfo
 	useState(() => {
-		const getCurrentUser = async () => {
-			try {
-				const { data } = await axios.get("/currentuser");
-				setCurrentUser(data._id);
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		getCurrentUser();
+		const data = Cookies.get("userid");
+		console.log(data);
+		setCurrentUser(data);
 	}, []);
 
 	useEffect(() => {

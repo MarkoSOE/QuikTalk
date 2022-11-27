@@ -2,6 +2,7 @@ import ChatContext from "../ChatContext";
 import { useState, useEffect, useContext, useSyncExternalStore } from "react";
 import axios from "axios";
 import DisplayMessage from "../components/Chat/DisplayMessage";
+import Cookies from "js-cookie";
 
 var socket, selectedChatCompare;
 
@@ -20,16 +21,22 @@ const ChatView = () => {
 	const [currentUser, setCurrentUser] = useState("");
 
 	//get userID
+	// useState(() => {
+	// 	const getCurrentUser = async () => {
+	// 		try {
+	// 			const { data } = await axios.get("/currentuser");
+	// 			setCurrentUser(data._id);
+	// 		} catch (error) {
+	// 			console.error(error);
+	// 		}
+	// 	};
+	// 	getCurrentUser();
+	// }, []);
+
+	//userinfo
 	useState(() => {
-		const getCurrentUser = async () => {
-			try {
-				const { data } = await axios.get("/currentuser");
-				setCurrentUser(data._id);
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		getCurrentUser();
+		const data = Cookies.get("userid");
+		setCurrentUser(data);
 	}, []);
 
 	const fetchAllMessages = async () => {

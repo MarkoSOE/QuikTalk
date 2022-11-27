@@ -1,4 +1,5 @@
 const Conversation = require("../models/Conversation");
+const User = require("../models/User");
 
 exports.createConversation = async (req, res) => {
 	//Ensuring required fields are filled
@@ -52,16 +53,41 @@ exports.createConversation = async (req, res) => {
 	} catch (error) {}
 };
 
+// exports.getAllConversations = async (req, res) => {
+// 	try {
+// 		const conversations = await Conversation.find()
+// 			.sort({ createdAt: "desc" })
+// 			.lean();
+// 		console.log(conversations);
+// 		res.status(200).send(conversations);
+// 	} catch (error) {
+// 		console.error(error);
+// 	}
+// };
+
 exports.getAllConversations = async (req, res) => {
-	try {
-		const conversations = await Conversation.find()
-			.sort({ createdAt: "desc" })
-			.lean();
-		console.log(conversations);
-		res.status(200).send(conversations);
-	} catch (error) {
-		console.error(error);
-	}
+	console.log("getting all conversations");
+	console.log(req);
+	// try {
+	// 	Conversation.find({ users: { $elemMatch: { $eq: req.user._id } } })
+	// 		.populate("users", "-password")
+	// 		.populate("grouphost", "-password")
+	// 		.populate("latestmessage")
+	// 		.sort({ updatedAt: "desc" })
+	// 		.then(async (data) => {
+	// 			data = await User.populate(data, {
+	// 				path: "latestmessage.sender",
+	// 				select: "-password",
+	// 			});
+	// 			res.status(200).send(data);
+	// 		})
+	// 		.catch((err) => {
+	// 			console.error(err);
+	// 			res.status(500).send(err);
+	// 		});
+	// } catch (error) {
+	// 	console.error(error);
+	// }
 };
 
 exports.getConversationById = async (req, res) => {

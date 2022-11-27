@@ -29,3 +29,12 @@ exports.createMessage = async (req, res) => {
 		throw new Error(error.message);
 	}
 };
+
+exports.getMessage = async (req, res) => {
+	try {
+		let message = await Message.findById(req.params.id);
+		res.json(message.message);
+	} catch (error) {
+		throw new Error(error.message);
+	}
+};

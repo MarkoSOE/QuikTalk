@@ -17,8 +17,11 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { LockClosedIcon } from "@heroicons/react/20/solid";
+import Cookies from "js-cookie";
 
 export default function Example() {
+	const navigate = useNavigate();
+
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -40,10 +43,12 @@ export default function Example() {
 				headers: {
 					"Content-Type": "application/json",
 				},
+				withCredentials: true,
+				credentials: "include",
 			};
 			const body = JSON.stringify(newUser);
 			await axios.post("/login", body, config).then((res) => {
-				console.log(res.data);
+				console.log(res);
 				window.location.href = "/homepage";
 			});
 		} catch (error) {
@@ -51,21 +56,17 @@ export default function Example() {
 		}
 	};
 
-	const navigate = useNavigate();
+	// check to see if the user is aready logged in
+	useEffect(() => {
+		if (Cookies.get("userid")) {
+			navigate("/homepage");
+		}
+	}, [navigate]);
 
 	//check to see if user is already logged in
 
 	return (
 		<>
-			{/*
-        This example requires updating your template:
-
-        ```
-        <html class="h-full bg-gray-50">
-        <body class="h-full">
-        ```
-      */}
-
 			<div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
 				<div className="w-full max-w-md space-y-8">
 					<div>
