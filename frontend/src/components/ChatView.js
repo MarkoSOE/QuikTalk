@@ -46,11 +46,11 @@ const ChatView = () => {
 
 	const sendMessage = async (e) => {
 		e.preventDefault();
-		// console.log(newMessage);
 		if (newMessage.trim().length === 0) return;
 		if (newMessage) {
 			try {
 				const data = await axios.post("/message/createMessage", {
+					user: currentUser,
 					message: newMessage,
 					chatID: selectedChat?._id,
 				});
