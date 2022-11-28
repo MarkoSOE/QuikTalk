@@ -67,30 +67,38 @@ exports.createConversation = async (req, res) => {
 
 exports.getAllConversations = async (req, res) => {
 	console.log("getting all conversations");
-	console.log(req);
-	// try {
-	// 	Conversation.find({ users: { $elemMatch: { $eq: req.user._id } } })
-	// 		.populate("users", "-password")
-	// 		.populate("grouphost", "-password")
-	// 		.populate("latestmessage")
-	// 		.sort({ updatedAt: "desc" })
-	// 		.then(async (data) => {
-	// 			data = await User.populate(data, {
-	// 				path: "latestmessage.sender",
-	// 				select: "-password",
-	// 			});
-	// 			res.status(200).send(data);
-	// 		})
-	// 		.catch((err) => {
-	// 			console.error(err);
-	// 			res.status(500).send(err);
-	// 		});
-	// } catch (error) {
-	// 	console.error(error);
-	// }
+	try {
+		Conversation.find({ users: { $elemMatch: { $eq: req.query.user_id } } })
+			.populate("users", "-password")
+			.populate("grouphost", "-password")
+			.populate("latestmessage")
+			.sort({ updatedAt: "desc" })
+			.then(async (data) => {
+				data = await User.populate(data, {
+					path: "latestmessage.sender",
+					select: "-password",
+				})
+					//want to convert the latestmessage.createdby to the user's name
+					.then(async (data) => {
+						data = await User.populate(data, {
+							path: "latestmessage.createdby",
+							select: "-password",
+						});
+						res.status(200).send(data);
+					});
+			})
+			.catch((err) => {
+				console.error(err);
+				res.status(500).send(err);
+			});
+	} catch (error) {
+		console.error(error);
+	}
 };
 
 exports.getConversationById = async (req, res) => {
+	console.log("getting conversation by id");
+	console.log(req.params.id);
 	try {
 		const conversation = await Conversation.findById(req.params.id).lean();
 		res.status(200).send(conversation);

@@ -1,33 +1,12 @@
-import React, { useState, useContext } from "react";
-import * as Scroll from "react-scroll";
-import axios from "axios";
+import React, { useContext } from "react";
 import ChatContext from "../../ChatContext";
-import {
-	Link,
-	DirectLink,
-	Element,
-	Events,
-	animateScroll as scroll,
-	scrollSpy,
-	scroller,
-} from "react-scroll";
 
 const DisplayMessage = ({ messages }) => {
+	const currentTime = new Date();
+
 	const { selectedChat, userIsTyping } = useContext(ChatContext);
-	const [currentuser, setCurrentUser] = useState("");
-	//get current user id
-	useState(() => {
-		const getCurrentUser = async () => {
-			try {
-				const { data } = await axios.get("/currentuser");
-				console.log(messages);
-				setCurrentUser(data._id);
-			} catch (error) {
-				console.error(error);
-			}
-		};
-		getCurrentUser();
-	}, []);
+
+	const currentUser = JSON.parse(localStorage.getItem("user"));
 
 	const roomID = selectedChat?._id;
 	const IsTyping = userIsTyping[roomID];
@@ -51,42 +30,69 @@ const DisplayMessage = ({ messages }) => {
 		);
 	};
 
+	//find the difference between the message sent time and the current time
+	const getTimeofMessage = (time) => {
+		const difference = currentTime - time;
+		const minutes = Math.floor(difference / 1000 / 60);
+		const hours = Math.floor(minutes / 60);
+		const days = Math.floor(hours / 24);
+		const months = Math.floor(days / 30);
+		const years = Math.floor(months / 12);
+
+		if (minutes < 1) {
+			return "Just now";
+		} else if (minutes < 60) {
+			return minutes + " minutes ago";
+		} else if (hours < 24) {
+			return hours + " hours ago";
+		} else if (days < 30) {
+			return days + " days ago";
+		} else if (months < 12) {
+			return months + " months ago";
+		} else {
+			return years + " years ago";
+		}
+	};
+
 	return (
 		<div className="all-msg-container">
 			{messages &&
 				messages.map((m, i) => {
 					return (
 						<>
-							{m?.sender?._id === currentuser} ? (
-							<div
-								className="chat-msg-container right-side"
-								key={m?.sender?._id}
-							>
-								<div className="chat-bubble-sender" key={m?.sender?._id}>
-									<span className="text-bubble sender">{m?.message}</span>
-									{/* add in chat time here */}
-								</div>
-							</div>
-							) : (
-							<div
-								className="chat-msg-container left-side"
-								key={m?.sender?._id}
-							>
-								{isSameSender(messages, m, i, currentuser) ||
-								isLastMessage(messages, i, currentuser) ? (
-									<>
-										<div className="chat-bubble-left" key={i}>
-											<span className="text-bubble receiver">{m?.message}</span>
-											{/* add in chat time here */}
-										</div>
-									</>
-								) : (
-									<div className="chat-bubble-left indent">
-										<span className="text-bubble receiver">{m.message}</span>
+							{m?.sender?._id === currentUser ? (
+								<div
+									className="chat-msg-container right-side"
+									key={m?.sender?._id}
+								>
+									<div className="chat-bubble-sender" key={m?.sender?._id}>
+										<span className="text-bubble sender">{m?.message}</span>
+										{getTimeofMessage(new Date(m?.createdAt))}
 									</div>
-								)}
-							</div>
-							)
+								</div>
+							) : (
+								<div
+									className="chat-msg-container left-side"
+									key={m?.sender?._id}
+								>
+									{isSameSender(messages, m, i, currentUser) ||
+									isLastMessage(messages, i, currentUser) ? (
+										<>
+											<div className="chat-bubble-left" key={i}>
+												<span className="text-bubble receiver">
+													{m?.message}
+												</span>
+												{getTimeofMessage(new Date(m?.createdAt))}
+											</div>
+										</>
+									) : (
+										<div className="chat-bubble-left indent">
+											<span className="text-bubble receiver">{m.message}</span>
+											{getTimeofMessage(new Date(m?.createdAt))}
+										</div>
+									)}
+								</div>
+							)}
 						</>
 					);
 				})}

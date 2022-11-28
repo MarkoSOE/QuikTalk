@@ -21,6 +21,16 @@ const MainPage = () => {
 		showUserProfile,
 	} = useContext(ChatContext);
 
+	const navigate = useNavigate();
+
+	//Redirect to login if no user found
+	useEffect(() => {
+		const user = JSON.parse(localStorage.getItem("user"));
+		if (!user) {
+			navigate("/");
+		}
+	}, []);
+
 	return (
 		<main className="homepage">
 			{showMessageList && <SideBar />}

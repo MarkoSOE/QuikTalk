@@ -884,7 +884,7 @@ aside {
 .conversation-list-wrapper {
   width: 100%;
   height: calc(100% - 135px);
-  overflow:auto;
+  /* overflow:auto; */
 }
 
 .message-tab-info-wrapper{

@@ -82,7 +82,7 @@ exports.postLogin = (req, res, next) => {
 				return next(err);
 			}
 			res.cookie("userid", user.id, { maxAge: 2592000000 });
-			return res.json({
+			return res.status(200).json({
 				_id: user._id,
 				firstname: user.firstname,
 				lastname: user.lastname,

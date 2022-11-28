@@ -47,10 +47,10 @@ export default function Example() {
 				credentials: "include",
 			};
 			const body = JSON.stringify(newUser);
-			await axios.post("/login", body, config).then((res) => {
-				console.log(res);
-				window.location.href = "/homepage";
-			});
+			const data = await axios.post("/login", body, config);
+			//store the user data in localstorage
+			localStorage.setItem("user", JSON.stringify(data.data));
+			// window.location.href = "/homepage";
 		} catch (error) {
 			console.error(error);
 		}

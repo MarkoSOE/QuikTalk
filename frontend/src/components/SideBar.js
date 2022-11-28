@@ -64,7 +64,7 @@ const SideBar = () => {
 		<aside>
 			<div className="aside-top-bar-wrapper">
 				<div className="message-tab-info-wrapper">
-					<div className="menu wrapper">
+					<div className="menu-wrapper">
 						<h3 className="msg-tab-title" onClick={openDDMenu}>
 							Messages
 						</h3>

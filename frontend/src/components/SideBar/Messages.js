@@ -17,13 +17,51 @@ const Messages = () => {
 
 	const currentTime = new Date();
 
-	//taking in an id of a message, and retriveing the message from the messages collection. this can't work because react can't render a promise object on the page. I need to figure out how to get the message from the database and then render it on the page.
+	const getMessage = (message) => {
+		if (message?.length > 25) {
+			return message.substring(0, 25) + "...";
+		} else {
+			return message;
+		}
+	};
+
+	//find the difference between the current time and the last message time
+	const latestMessageTime = (curentTime, messageSentTime) => {
+		const difference = curentTime - messageSentTime;
+
+		const minutes = Math.floor(difference / 1000 / 60);
+		const hours = Math.floor(minutes / 60);
+		const days = Math.floor(hours / 24);
+		const months = Math.floor(days / 30);
+		const years = Math.floor(months / 12);
+
+		if (minutes < 1) {
+			return "Just now";
+		} else if (minutes < 60) {
+			return minutes + " minutes ago";
+		} else if (hours < 24) {
+			return hours + " hours ago";
+		} else if (days < 30) {
+			return days + " days ago";
+		} else if (months < 12) {
+			return months + " months ago";
+		} else {
+			return years + " years ago";
+		}
+	};
 
 	//here we want to get all the conversations that belong to the logged in user
 	useEffect(() => {
 		try {
 			const getChat = async () => {
-				const data = await axios.get(`/conversation/getallConvos`);
+				//get the userid from localstorage
+				const body = JSON.parse(localStorage.getItem("user"));
+				//send the body variable to the backend with axios
+				const data = await axios.get(`/conversation/getallConvos`, {
+					params: {
+						user_id: body?._id,
+					},
+				});
 				console.log(data);
 				setChats(data.data);
 			};
@@ -33,28 +71,16 @@ const Messages = () => {
 		}
 	}, []);
 
-	let openChat;
-
 	//want to get a conversation by id and setSelectedChat to that conversation
-	const getChatById = async (id) => {
+	const openChat = async (id) => {
 		try {
 			const data = await axios.get(`/conversation/${id}`);
-			setSelectedChat(data.data);
 			setShowChatBox(true);
-			setShowMessageList(false);
+			return setSelectedChat(data.data);
 		} catch (error) {
 			console.error(error);
 		}
 	};
-
-	// openChat = async (id) => {
-	// 	try {
-	// 		const { data } = await axios.get(`/conversation/${id}`);
-	// 		return selectedChat(data);
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 	}
-	// };
 
 	const skeletonArray = [1, 2, 3, 4, 5, 6, 7, 8];
 	const skeletonLoader = skeletonArray.map((box, index) => {
@@ -124,35 +150,37 @@ const Messages = () => {
 								: getSenderName(loggedUserID, chat)} */}
 						</h6>
 					) : (
-						<h6 className="conversaton-sender">
+						<h6 className="conversation-sender">
 							{chat?.chatname.length > 20
 								? chat?.chatname.substring(0, 20) + ".."
 								: chat?.chatname}
 						</h6>
 					)}
 					<span className="conversation-brief">
-						{/* {userIsTyping[chat?._id]
+						{chat?.isgroupchat ? chat?.latestmessage?.createdby?.firstname : ""}{" "}
+						:
+						{userIsTyping[chat?._id]
 							? "Typing..."
-							: getMessage(chat?.latestmessage)} */}
+							: getMessage(chat?.latestmessage.message)}
 					</span>
 				</div>
 				<div className="conversation-date">
 					<span className="conversation-timestamp">
-						{/* {latestMessageTime(
+						{latestMessageTime(
 							currentTime,
-							new Date(chat?.latestMessage?.updatedAt)
-						)} */}
+							new Date(chat?.latestmessage?.updatedAt)
+						)}
 					</span>
 				</div>
 				<div
 					className="invisible-msg-wrapper"
 					id={chat?._id}
-					onClick={(e) => getChatById(e.target.id)}
+					onClick={(e) => openChat(e.target.id)}
 				></div>
 			</section>
 		);
 	});
-	return <div className="conversation-list wrapper"> {messageList} </div>;
+	return <div className="conversation-list-wrapper"> {messageList} </div>;
 };
 
 export default Messages;

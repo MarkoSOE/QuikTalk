@@ -1,5 +1,5 @@
 import ChatContext from "../ChatContext";
-import { useState, useEffect, useContext, useSyncExternalStore } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import DisplayMessage from "../components/Chat/DisplayMessage";
 import Cookies from "js-cookie";
@@ -20,31 +20,25 @@ const ChatView = () => {
 	const [typing, setTyping] = useState(false);
 	const [currentUser, setCurrentUser] = useState("");
 
-	//get userID
-	// useState(() => {
-	// 	const getCurrentUser = async () => {
-	// 		try {
-	// 			const { data } = await axios.get("/currentuser");
-	// 			setCurrentUser(data._id);
-	// 		} catch (error) {
-	// 			console.error(error);
-	// 		}
-	// 	};
-	// 	getCurrentUser();
-	// }, []);
-
 	//userinfo
 	useState(() => {
 		const data = Cookies.get("userid");
 		setCurrentUser(data);
 	}, []);
 
+	//get all messages
+	useEffect(() => {
+		fetchAllMessages();
+		selectedChatCompare = selectedChat;
+	}, [selectedChat]);
+
 	const fetchAllMessages = async () => {
 		if (!selectedChat) return;
 		try {
-			const { data } = await axios.get(`/conversation/${selectedChat?._id}`);
+			const { data } = await axios.get(`/message/${selectedChat?._id}`);
+			console.log(data);
 			setAllMessages(data);
-			socket.emit("join chat", selectedChat?._id);
+			// socket.emit("join chat", selectedChat?._id);
 		} catch (error) {
 			console.error(error);
 		}
@@ -98,17 +92,17 @@ const ChatView = () => {
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
-							stroke-width="1.5"
+							strokeWidth="1.5"
 							stroke="white"
-							class="w-6 h-6"
+							className="w-6 h-6"
 						>
 							<path
-								stroke-linecap="round"
-								stroke-linejoin="round"
+								strokeLinecap="round"
+								strokeLinejoin="round"
 								d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
 							/>
 						</svg>
-						{selectedChat?.isGroupChat ? (
+						{selectedChat?.isgroupchat ? (
 							<div className="group-chat-wrapper">
 								<div className="group-chat-icon-wrapper">
 									<span className="group-chat-user-profile">
@@ -121,7 +115,7 @@ const ChatView = () => {
 										<span className="group-count">some count</span>
 									</div>
 								</div>
-								<h1 className="group chat-name">
+								<h1 className="group-chat-name">
 									{selectedChat?.chatname.length > 21
 										? selectedChat?.chatname.substring(0, 21) + ".."
 										: selectedChat?.chatname}
@@ -136,22 +130,21 @@ const ChatView = () => {
 								</div>
 							</div>
 						)}
-
-						<div className="open-msg-box">
-							<DisplayMessage messages={allMessages} />
-						</div>
-						<div className="msg-input-container">
-							<form className="send-msg-form" onSubmit={sendMessage}>
-								<input
-									type="text"
-									placeholder="Send a message"
-									className="send-msg-input"
-									onChange={userTyping}
-									value={newMessage}
-								></input>
-							</form>
-							<button className="send-btn" onClick={sendMessage}></button>
-						</div>
+					</div>
+					<div className="open-msg-box">
+						<DisplayMessage messages={allMessages} />
+					</div>
+					<div className="msg-input-container">
+						<form className="send-msg-form" onSubmit={sendMessage}>
+							<input
+								type="text"
+								placeholder="Send a message"
+								className="send-msg-input"
+								onChange={userTyping}
+								value={newMessage}
+							></input>
+						</form>
+						<button className="send-btn" onClick={sendMessage}></button>
 					</div>
 				</>
 			) : (

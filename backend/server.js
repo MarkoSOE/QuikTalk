@@ -30,10 +30,10 @@ app.use(
 	})
 );
 
-app.use(cookieParser());
 //Middleware that parses incoming JSON request and puts the data in req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+// app.use(cookieParser());
 
 //Connect To Database
 connectDB();

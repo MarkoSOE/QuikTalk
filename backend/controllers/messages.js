@@ -38,3 +38,13 @@ exports.getMessage = async (req, res) => {
 		throw new Error(error.message);
 	}
 };
+
+exports.getAllMessages = async (req, res) => {
+	console.log("getting all messages");
+	try {
+		let messages = await Message.find({ chatref: req.params.id });
+		res.json(messages);
+	} catch (error) {
+		throw new Error(error.message);
+	}
+};
