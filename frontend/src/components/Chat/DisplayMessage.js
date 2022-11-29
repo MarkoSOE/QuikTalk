@@ -42,12 +42,20 @@ const DisplayMessage = ({ messages }) => {
 
 		if (minutes < 1) {
 			return "Just now";
+		} else if (minutes === 1) {
+			return "1 minute ago";
 		} else if (minutes < 60) {
 			return minutes + " minutes ago";
+		} else if (hours === 1) {
+			return "1 hour ago";
 		} else if (hours < 24) {
 			return hours + " hours ago";
+		} else if (days === 1) {
+			return "1 day ago";
 		} else if (days < 30) {
 			return days + " days ago";
+		} else if (months === 1) {
+			return "1 month ago";
 		} else if (months < 12) {
 			return months + " months ago";
 		} else {
@@ -60,41 +68,41 @@ const DisplayMessage = ({ messages }) => {
 			{messages &&
 				messages.map((m, i) => {
 					return (
-						<>
+						<div className="chat">
 							{m?.createdby === currentUserId ? (
-								<div
-									className="chat-msg-container right-side"
-									key={m?.createdby}
-								>
-									<div className="chat-bubble-createdby" key={m?.createdby}>
-										<span className="text-bubble createdby">{m?.message}</span>
-										{getTimeofMessage(new Date(m?.createdAt))}
+								<div className="mine messages" key={m?.createdby}>
+									<div className="message last" key={m?.createdby?._id}>
+										<span>{m?.message}</span>
 									</div>
+									<span className="chat-bubble-time-right">
+										{getTimeofMessage(new Date(m?.createdAt))}
+									</span>
 								</div>
 							) : (
-								<div
-									className="chat-msg-container left-side"
-									key={m?.createdby}
-								>
+								<div className="yours messages" key={m?.createdby}>
 									{isSamecreatedby(messages, m, i, currentUser) ||
 									isLastMessage(messages, i, currentUser) ? (
 										<>
-											<div className="chat-bubble-left" key={i}>
-												<span className="text-bubble receiver">
-													{m?.message}
-												</span>
-												{getTimeofMessage(new Date(m?.createdAt))}
+											<div className="message" key={m?.createdby?._id}>
+												<span>{m?.message}</span>
 											</div>
+											<span className="chat-bubble-time-right">
+												{getTimeofMessage(new Date(m?.createdAt))}
+											</span>
 										</>
 									) : (
-										<div className="chat-bubble-left indent">
-											<span className="text-bubble receiver">{m.message}</span>
-											{getTimeofMessage(new Date(m?.createdAt))}
-										</div>
+										<>
+											<div className="message last" key={m?.createdby?._id}>
+												<span>{m?.message}</span>
+											</div>
+											<span className="chat-bubble-time-right">
+												{getTimeofMessage(new Date(m?.createdAt))}
+											</span>
+										</>
 									)}
 								</div>
 							)}
-						</>
+						</div>
 					);
 				})}
 		</div>

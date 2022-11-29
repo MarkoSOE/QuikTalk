@@ -37,12 +37,20 @@ const Messages = () => {
 
 		if (minutes < 1) {
 			return "Just now";
+		} else if (minutes === 1) {
+			return "1 minute ago";
 		} else if (minutes < 60) {
 			return minutes + " minutes ago";
+		} else if (hours === 1) {
+			return "1 hour ago";
 		} else if (hours < 24) {
 			return hours + " hours ago";
+		} else if (days === 1) {
+			return "1 day ago";
 		} else if (days < 30) {
 			return days + " days ago";
+		} else if (months === 1) {
+			return "1 month ago";
 		} else if (months < 12) {
 			return months + " months ago";
 		} else {
