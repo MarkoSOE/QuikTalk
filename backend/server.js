@@ -14,6 +14,11 @@ const mainRoutes = require("./routes/main");
 const messageRoutes = require("./routes/messages");
 const conversationRoutes = require("./routes/conversation");
 const PORT = process.env.PORT || 3001;
+const socketIO = require("socket.io")(http, {
+	cors: {
+		origin: "http://localhost:3000",
+	},
+});
 // const messageRoutes = require("./routes/messages");
 
 //Use .env file in config folder
@@ -65,6 +70,15 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate("session"));
+
+//socketio
+
+socketIO.on("connection", (socket) => {
+	console.log(`Alert: ${socket.id} user just connected!`);
+	socket.on("disconnect", () => {
+		console.log("A user disconnected");
+	});
+});
 
 //Use flash messages for errors, info, ect...
 app.use(flash());

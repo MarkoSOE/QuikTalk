@@ -68,7 +68,7 @@ const DisplayMessage = ({ messages }) => {
 			{messages &&
 				messages.map((m, i) => {
 					return (
-						<div className="chat">
+						<div className="chat" key={i}>
 							{m?.createdby === currentUserId ? (
 								<div className="mine messages" key={m?.createdby}>
 									<div className="message last" key={m?.createdby?._id}>

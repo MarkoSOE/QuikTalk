@@ -52,8 +52,13 @@ const SideBar = () => {
 	};
 
 	const signOut = async () => {
-		await axios.get("/logout");
-		navigate("/");
+		try {
+			await axios.get("/logout");
+			localStorage.removeItem("user");
+			navigate("/");
+		} catch (error) {
+			console.error(error);
+		}
 	};
 
 	const handleSearchInput = (e) => {
