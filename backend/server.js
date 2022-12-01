@@ -13,13 +13,14 @@ const connectDB = require("./config/database");
 const mainRoutes = require("./routes/main");
 const messageRoutes = require("./routes/messages");
 const conversationRoutes = require("./routes/conversation");
+const http = require("http").Server(app);
 const PORT = process.env.PORT || 3001;
+
 const socketIO = require("socket.io")(http, {
 	cors: {
-		origin: "http://localhost:3000",
+		origin: "http://localhost:4000",
 	},
 });
-// const messageRoutes = require("./routes/messages");
 
 //Use .env file in config folder
 require("dotenv").config({ path: "./config/.env" });
@@ -38,7 +39,6 @@ app.use(
 //Middleware that parses incoming JSON request and puts the data in req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-// app.use(cookieParser());
 
 //Connect To Database
 connectDB();
@@ -77,6 +77,9 @@ socketIO.on("connection", (socket) => {
 	console.log(`Alert: ${socket.id} user just connected!`);
 	socket.on("disconnect", () => {
 		console.log("A user disconnected");
+	});
+	socket.on("message", (data) => {
+		console.log(data);
 	});
 });
 

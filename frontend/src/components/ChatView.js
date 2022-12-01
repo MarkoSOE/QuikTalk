@@ -4,6 +4,8 @@ import axios from "axios";
 import DisplayMessage from "../components/Chat/DisplayMessage";
 import Cookies from "js-cookie";
 
+import socketIOClient from "socket.io-client";
+
 var socket, selectedChatCompare;
 
 const ChatView = () => {
@@ -56,7 +58,7 @@ const ChatView = () => {
 				});
 				setNewMessage("");
 				setTyping(false);
-				console.log(data);
+				socket.emit("new message", data);
 				setAllMessages([...allMessages, data]);
 			} catch (error) {
 				console.error(error);

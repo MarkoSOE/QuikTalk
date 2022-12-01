@@ -7,7 +7,7 @@ import ChatView from "../components/ChatView";
 import ChatContext from "../ChatContext";
 import { useNavigate } from "react-router-dom";
 
-const MainPage = () => {
+const MainPage = ({ socket }) => {
 	//set up state to contain the message to be sent to the backend
 	const {
 		showModal,
