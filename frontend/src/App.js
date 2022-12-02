@@ -8,7 +8,7 @@ import socketIO from "socket.io-client";
 
 import { ChatProvider } from "./ChatContext";
 
-const socket = socketIO("http://localhost:4000");
+const socket = socketIO("http://localhost:3000");
 
 const App = () => {
 	return (

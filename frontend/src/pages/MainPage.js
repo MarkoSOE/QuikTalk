@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
 
 import "../index.css";
@@ -8,7 +8,7 @@ import ChatContext from "../ChatContext";
 import { useNavigate } from "react-router-dom";
 
 const MainPage = ({ socket }) => {
-	//set up state to contain the message to be sent to the backend
+	//global states
 	const {
 		showModal,
 		showChatBox,
@@ -21,6 +21,11 @@ const MainPage = ({ socket }) => {
 		showUserProfile,
 	} = useContext(ChatContext);
 
+	//local states
+	const [messages, setMessages] = useState([]);
+	const [typingStatus, setTypingStatus] = useState(false);
+	const lastMessageRef = useRef(null);
+
 	const navigate = useNavigate();
 
 	//Redirect to login if no user found
@@ -31,10 +36,26 @@ const MainPage = ({ socket }) => {
 		}
 	}, []);
 
+	//listen for typing status
+	useEffect(() => {
+		socket.on("typingResponse", (data) => setTypingStatus(true));
+	}, [socket]);
+
+	//last message behavior
+	useEffect(() => {
+		lastMessageRef.current?.scrollintoView({ behavior: "smooth" });
+	}, [messages]);
+
 	return (
 		<main className="homepage">
 			{showMessageList && <SideBar />}
-			{showChatBox && <ChatView />}
+			{showChatBox && (
+				<ChatView
+					socket={socket}
+					lastMessageRef={lastMessageRef}
+					typingStatus={typingStatus}
+				/>
+			)}
 		</main>
 	);
 };

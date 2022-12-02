@@ -8,7 +8,7 @@ import socketIOClient from "socket.io-client";
 
 var socket, selectedChatCompare;
 
-const ChatView = () => {
+const ChatView = ({ socket, lastMessageRef, typingStatus }) => {
 	const {
 		selectedChat,
 		setUserIsTyping,
@@ -46,6 +46,17 @@ const ChatView = () => {
 		}
 	};
 
+	//listen for new messages
+	useEffect(() => {
+		socket.on("new message", (data) => {
+			setAllMessages([...allMessages, data]);
+		});
+	}, [socket, allMessages]);
+
+	const handleTyping = () => {
+		socket.emit("typing", `${currentUser._id} is typing...`);
+	};
+
 	const sendMessage = async (e) => {
 		e.preventDefault();
 		if (newMessage.trim().length === 0) return;
@@ -56,10 +67,10 @@ const ChatView = () => {
 					message: newMessage,
 					chatID: selectedChat?._id,
 				});
+				socket.emit("message", data);
+				setAllMessages([...allMessages, data]);
 				setNewMessage("");
 				setTyping(false);
-				socket.emit("new message", data);
-				setAllMessages([...allMessages, data]);
 			} catch (error) {
 				console.error(error);
 			}
@@ -134,7 +145,13 @@ const ChatView = () => {
 						)}
 					</div>
 					<div className="open-msg-box">
-						<DisplayMessage messages={allMessages} />
+						<DisplayMessage
+							messages={allMessages}
+							lastMessageRef={lastMessageRef}
+						/>
+					</div>
+					<div className="message-status">
+						<p> {typingStatus}</p>
 					</div>
 					<div className="msg-input-container">
 						<form className="send-msg-form" onSubmit={sendMessage}>
@@ -143,6 +160,7 @@ const ChatView = () => {
 								placeholder="Send a message"
 								className="send-msg-input"
 								onChange={userTyping}
+								onKeyDown={handleTyping}
 								value={newMessage}
 							></input>
 						</form>

@@ -1325,7 +1325,12 @@ aside {
   border-bottom-left-radius: 10px;
 }
 
-
+.message-status {
+  position: fixed;
+  bottom: 50px;
+  font-size: 13px;
+  font-style: italic;
+}
 
 /* End of Testing Chats */
 
@@ -1340,12 +1345,13 @@ aside {
 .all-msg-container{
   font-family: "Helvetica Neue", Helvetica, sans-serif;
   display: flex;
+  height: 600px;
   padding: 1.5rem;
   padding-bottom: .5rem;
   flex-direction: column;
   align-items: center;
   overflow-x:hidden;
-  overflow-y: auto;
+  overflow-y: scroll;
   font-size: 1.7rem;
 }
 

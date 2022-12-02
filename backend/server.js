@@ -18,7 +18,7 @@ const PORT = process.env.PORT || 3001;
 
 const socketIO = require("socket.io")(http, {
 	cors: {
-		origin: "http://localhost:4000",
+		origin: "http://localhost:3001",
 	},
 });
 
@@ -79,8 +79,9 @@ socketIO.on("connection", (socket) => {
 		console.log("A user disconnected");
 	});
 	socket.on("message", (data) => {
-		console.log(data);
+		socketIO.emit("messageResponse", data);
 	});
+	socket.on("typing", (data) => socket.broadcast.emit("typingResponse", data));
 });
 
 //Use flash messages for errors, info, ect...
@@ -92,6 +93,6 @@ app.use("/message", messageRoutes);
 app.use("/conversation", conversationRoutes);
 
 //Server Running
-app.listen(PORT, () => {
+http.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}, you better catch it!`);
 });

@@ -1,7 +1,13 @@
-import React, { useContext } from "react";
+import React, {
+	useContext,
+	useEffect,
+	useInsertionEffect,
+	useRef,
+} from "react";
+import { Socket } from "socket.io-client";
 import ChatContext from "../../ChatContext";
 
-const DisplayMessage = ({ messages }) => {
+const DisplayMessage = ({ messages, lastMessageRef }) => {
 	const currentTime = new Date();
 
 	const { selectedChat, userIsTyping } = useContext(ChatContext);
@@ -105,6 +111,7 @@ const DisplayMessage = ({ messages }) => {
 						</div>
 					);
 				})}
+			<div ref={lastMessageRef}></div>
 		</div>
 	);
 };
