@@ -7,7 +7,7 @@ import React, {
 import { Socket } from "socket.io-client";
 import ChatContext from "../../ChatContext";
 
-const DisplayMessage = ({ messages, lastMessageRef }) => {
+const DisplayMessage = ({ messages, socket, scrollRef }) => {
 	const currentTime = new Date();
 
 	const { selectedChat, userIsTyping } = useContext(ChatContext);
@@ -74,7 +74,7 @@ const DisplayMessage = ({ messages, lastMessageRef }) => {
 			{messages &&
 				messages.map((m, i) => {
 					return (
-						<div className="chat" key={i}>
+						<div className="chat" key={i} ref={scrollRef}>
 							{m?.createdby === currentUserId ? (
 								<div className="mine messages" key={m?.createdby}>
 									<div className="message last" key={m?.createdby?._id}>
@@ -111,7 +111,7 @@ const DisplayMessage = ({ messages, lastMessageRef }) => {
 						</div>
 					);
 				})}
-			<div ref={lastMessageRef}></div>
+			<div></div>
 		</div>
 	);
 };

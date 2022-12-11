@@ -1,26 +1,29 @@
 import ChatContext from "../ChatContext";
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useRef, useCallback } from "react";
 import axios from "axios";
 import DisplayMessage from "../components/Chat/DisplayMessage";
 import Cookies from "js-cookie";
-
-import socketIOClient from "socket.io-client";
+import { io } from "socket.io-client";
 
 var socket, selectedChatCompare;
 
-const ChatView = ({ socket, lastMessageRef, typingStatus }) => {
+const ChatView = ({ socket }) => {
 	const {
 		selectedChat,
 		setUserIsTyping,
 		setShowChatBox,
 		setShowMessageList,
 		setSelectedChat,
+		currentUser,
+		setCurrentUser,
 	} = useContext(ChatContext);
+
+	const scrollRef = useRef();
 
 	const [newMessage, setNewMessage] = useState("");
 	const [allMessages, setAllMessages] = useState();
 	const [typing, setTyping] = useState(false);
-	const [currentUser, setCurrentUser] = useState("");
+	const [arrivalMessage, setArrivalMessage] = useState(null);
 
 	//userinfo
 	useState(() => {
@@ -48,7 +51,7 @@ const ChatView = ({ socket, lastMessageRef, typingStatus }) => {
 
 	//listen for new messages
 	useEffect(() => {
-		socket.on("new message", (data) => {
+		socket.on("messageResponse", (data) => {
 			setAllMessages([...allMessages, data]);
 		});
 	}, [socket, allMessages]);
@@ -56,6 +59,33 @@ const ChatView = ({ socket, lastMessageRef, typingStatus }) => {
 	const handleTyping = () => {
 		socket.emit("typing", `${currentUser._id} is typing...`);
 	};
+
+	const recieveMessage = useCallback(() => {
+		if (socket.current) {
+			socket.current.on("msg-receive", (msg) => {
+				console.log({ msg });
+				setArrivalMessage({
+					chatId: msg.chatId,
+					message: msg.message,
+					sender: msg.sender,
+				});
+			});
+		}
+	}, []);
+
+	useEffect(() => {
+		recieveMessage();
+	}, [recieveMessage]);
+
+	useEffect(() => {
+		arrivalMessage &&
+			selectedChatCompare?._id === arrivalMessage?.chatId &&
+			setAllMessages((prev) => [...prev, arrivalMessage]);
+	}, [arrivalMessage]);
+
+	useEffect(() => {
+		scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, [allMessages]);
 
 	const sendMessage = async (e) => {
 		e.preventDefault();
@@ -67,7 +97,7 @@ const ChatView = ({ socket, lastMessageRef, typingStatus }) => {
 					message: newMessage,
 					chatID: selectedChat?._id,
 				});
-				socket.emit("message", data);
+				socket.current.emit("message", data);
 				setAllMessages([...allMessages, data]);
 				setNewMessage("");
 				setTyping(false);
@@ -147,11 +177,12 @@ const ChatView = ({ socket, lastMessageRef, typingStatus }) => {
 					<div className="open-msg-box">
 						<DisplayMessage
 							messages={allMessages}
-							lastMessageRef={lastMessageRef}
+							socket={socket}
+							scrollRef={scrollRef}
 						/>
 					</div>
 					<div className="message-status">
-						<p> {typingStatus}</p>
+						<p> </p>
 					</div>
 					<div className="msg-input-container">
 						<form className="send-msg-form" onSubmit={sendMessage}>

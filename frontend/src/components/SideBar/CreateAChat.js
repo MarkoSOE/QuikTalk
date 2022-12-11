@@ -2,10 +2,21 @@ import React, { useState, useEffect } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
-import { UseQueryClient } from "react-query";
+import { useContext } from "react";
+import ChatContext from "../../ChatContext";
 
 const CreateAChat = () => {
 	// const queryClient = UseQueryClient()
+
+	const {
+		currentUser,
+		setCurrentUser,
+		setShowModal,
+		setSelectedChat,
+		width,
+		setShowMessageList,
+		setShowChatBox,
+	} = useContext(ChatContext);
 
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
@@ -33,13 +44,13 @@ const CreateAChat = () => {
 	//want to access all the users in the database and store their information in the users array
 	const getUsers = async () => {
 		setShow(true);
-		try {
-			const res = await axios.get("/users");
-			setUsers(res.data);
-			console.log(res.data);
-		} catch (error) {
-			console.error(error);
-		}
+		// try {
+		// 	const res = await axios.get("/users");
+		// 	setUsers(res.data);
+		// 	console.log(res.data);
+		// } catch (error) {
+		// 	console.error(error);
+		// }
 	};
 
 	// const singleSearch = async(search) =>{
@@ -65,7 +76,7 @@ const CreateAChat = () => {
 
 		try {
 			const req = await axios.get(`/singleuser`, {
-				params: { firstName: input },
+				params: { firstName: input, user: currentUser._id },
 			});
 			setSearchQueryResults(req.data);
 		} catch (error) {
@@ -93,6 +104,7 @@ const CreateAChat = () => {
 			const { data } = await axios.post("/conversation/createConvo", {
 				chatname: groupChatName,
 				users: JSON.stringify(selectedUsers.map((user) => user._id)),
+				user: currentUser,
 			});
 		} catch (error) {
 			console.error(error);

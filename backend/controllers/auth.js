@@ -15,6 +15,9 @@ exports.getLogin = (req, res) => {
 
 //get a single user that matches the ID being passed in
 exports.getSingularUser = async (req, res) => {
+	console.log("getting a single user");
+	console.log(req.query.firstName);
+	console.log(req.query.user);
 	try {
 		const keyword = req.query.firstName
 			? {
@@ -24,9 +27,9 @@ exports.getSingularUser = async (req, res) => {
 					],
 			  }
 			: {};
-
+		console.log("keyword: ", keyword);
 		const users = await User.find(keyword).find({
-			_id: { $ne: req.user._id },
+			_id: { $ne: req.query._id },
 		});
 		res.send(users);
 		console.log(users);

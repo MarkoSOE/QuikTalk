@@ -11,6 +11,8 @@ const Messages = () => {
 		setShowChatBox,
 		setShowMessageList,
 		userIsTyping,
+		currentUser,
+		setCurrentUser,
 	} = useContext(ChatContext);
 
 	const [test, setTest] = useState([]);
@@ -62,12 +64,9 @@ const Messages = () => {
 	useEffect(() => {
 		try {
 			const getChat = async () => {
-				//get the userid from localstorage
-				const body = JSON.parse(localStorage.getItem("user"));
-				//send the body variable to the backend with axios
 				const data = await axios.get(`/conversation/getallConvos`, {
 					params: {
-						user_id: body?._id,
+						user_id: currentUser?._id,
 					},
 				});
 				console.log(data);
@@ -169,7 +168,7 @@ const Messages = () => {
 						:
 						{userIsTyping[chat?._id]
 							? "Typing..."
-							: getMessage(chat?.latestmessage.message)}
+							: getMessage(chat?.latestmessage?.message)}
 					</span>
 				</div>
 				<div className="conversation-date">

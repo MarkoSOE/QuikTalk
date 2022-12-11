@@ -19,6 +19,8 @@ const MainPage = ({ socket }) => {
 		setShowMessageList,
 		showEditModal,
 		showUserProfile,
+		currentUser,
+		setCurrentUser,
 	} = useContext(ChatContext);
 
 	//local states
@@ -28,34 +30,20 @@ const MainPage = ({ socket }) => {
 
 	const navigate = useNavigate();
 
-	//Redirect to login if no user found
+	//Redirect to login if no user found, storing the user in context
 	useEffect(() => {
 		const user = JSON.parse(localStorage.getItem("user"));
 		if (!user) {
 			navigate("/");
+		} else {
+			setCurrentUser(user);
 		}
 	}, []);
-
-	//listen for typing status
-	useEffect(() => {
-		socket.on("typingResponse", (data) => setTypingStatus(true));
-	}, [socket]);
-
-	//last message behavior
-	useEffect(() => {
-		lastMessageRef.current?.scrollintoView({ behavior: "smooth" });
-	}, [messages]);
 
 	return (
 		<main className="homepage">
 			{showMessageList && <SideBar />}
-			{showChatBox && (
-				<ChatView
-					socket={socket}
-					lastMessageRef={lastMessageRef}
-					typingStatus={typingStatus}
-				/>
-			)}
+			{showChatBox && <ChatView socket={socket} />}
 		</main>
 	);
 };

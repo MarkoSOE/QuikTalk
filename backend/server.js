@@ -16,9 +16,10 @@ const conversationRoutes = require("./routes/conversation");
 const http = require("http").Server(app);
 const PORT = process.env.PORT || 3001;
 
-const socketIO = require("socket.io")(http, {
+const io = require("socket.io")(http, {
 	cors: {
 		origin: "http://localhost:3001",
+		credentials: true,
 	},
 });
 
@@ -71,15 +72,24 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate("session"));
 
-//socketio
+global.onlineUsers = new Map();
 
-socketIO.on("connection", (socket) => {
+//socketio
+io.on("connection", (socket) => {
+	global.chatSocket = socket;
 	console.log(`Alert: ${socket.id} user just connected!`);
+	socket.on("add-user", (userId) => {
+		onlineUsers.set(userId, socket.id);
+	});
 	socket.on("disconnect", () => {
 		console.log("A user disconnected");
 	});
-	socket.on("message", (data) => {
-		socketIO.emit("messageResponse", data);
+	socket.on("send-msg", (data) => {
+		console.log("sendmsg", data);
+		const sendUserSocket = onlineUsers.get(data.chatref);
+		if (sendUserSocket) {
+			socket.to(sendUserSocket).emit("msg-recieve", data.message);
+		}
 	});
 	socket.on("typing", (data) => socket.broadcast.emit("typingResponse", data));
 });

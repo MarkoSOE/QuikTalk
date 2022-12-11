@@ -4,26 +4,23 @@ import axios from "axios";
 import CreateAChat from "./SideBar/CreateAChat";
 import ChatContext from "../ChatContext";
 import Messages from "./SideBar/Messages";
-import Cookies from "js-cookie";
 
 const SideBar = () => {
-	const { search, setSearch, setShowModal, setSelectedChat } =
-		useContext(ChatContext);
+	const {
+		search,
+		setSearch,
+		setShowModal,
+		setSelectedChat,
+		currentUser,
+		setCurrentUser,
+	} = useContext(ChatContext);
 
 	const [searchResult, setSearchResult] = useState([]);
 	const [showOnline, setShowOnline] = useState(false);
 	const [openDD, setOpenDD] = useState(false);
 	const [showToast, setShowToast] = useState(false);
-	const [currentUser, setCurrentUser] = useState("");
 
 	const navigate = useNavigate();
-
-	//uerinfo
-	useState(() => {
-		const data = Cookies.get("userid");
-		console.log(data);
-		setCurrentUser(data);
-	}, []);
 
 	useEffect(() => {
 		if (search === "") {
@@ -55,6 +52,7 @@ const SideBar = () => {
 		try {
 			await axios.get("/logout");
 			localStorage.removeItem("user");
+			setCurrentUser("");
 			navigate("/");
 		} catch (error) {
 			console.error(error);
