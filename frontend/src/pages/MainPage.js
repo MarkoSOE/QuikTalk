@@ -1,13 +1,13 @@
 import { useContext, useEffect, useRef, useState } from "react";
 import axios from "axios";
-
+import { io } from "socket.io-client";
 import "../index.css";
 import SideBar from "../components/SideBar";
 import ChatView from "../components/ChatView";
 import ChatContext from "../ChatContext";
 import { useNavigate } from "react-router-dom";
 
-const MainPage = ({ socket }) => {
+const MainPage = () => {
 	//global states
 	const {
 		showModal,
@@ -22,6 +22,8 @@ const MainPage = ({ socket }) => {
 		currentUser,
 		setCurrentUser,
 	} = useContext(ChatContext);
+
+	const socket = useRef();
 
 	//local states
 	const [messages, setMessages] = useState([]);
@@ -39,6 +41,13 @@ const MainPage = ({ socket }) => {
 			setCurrentUser(user);
 		}
 	}, []);
+
+	useEffect(() => {
+		if (currentUser) {
+			socket.current = io("http://localhost:3001");
+			socket.current.emit("add-user", currentUser._id);
+		}
+	});
 
 	return (
 		<main className="homepage">

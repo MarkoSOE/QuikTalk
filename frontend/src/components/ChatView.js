@@ -97,7 +97,7 @@ const ChatView = ({ socket }) => {
 					message: newMessage,
 					chatID: selectedChat?._id,
 				});
-				socket.current.emit("message", data);
+				// socket.current.emit("message", data);
 				setAllMessages([...allMessages, data]);
 				setNewMessage("");
 				setTyping(false);

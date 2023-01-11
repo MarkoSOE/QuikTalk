@@ -16,13 +16,6 @@ const conversationRoutes = require("./routes/conversation");
 const http = require("http").Server(app);
 const PORT = process.env.PORT || 3001;
 
-const io = require("socket.io")(http, {
-	cors: {
-		origin: "http://localhost:3001",
-		credentials: true,
-	},
-});
-
 //Use .env file in config folder
 require("dotenv").config({ path: "./config/.env" });
 
@@ -72,28 +65,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate("session"));
 
-global.onlineUsers = new Map();
-
-//socketio
-io.on("connection", (socket) => {
-	global.chatSocket = socket;
-	console.log(`Alert: ${socket.id} user just connected!`);
-	socket.on("add-user", (userId) => {
-		onlineUsers.set(userId, socket.id);
-	});
-	socket.on("disconnect", () => {
-		console.log("A user disconnected");
-	});
-	socket.on("send-msg", (data) => {
-		console.log("sendmsg", data);
-		const sendUserSocket = onlineUsers.get(data.chatref);
-		if (sendUserSocket) {
-			socket.to(sendUserSocket).emit("msg-recieve", data.message);
-		}
-	});
-	socket.on("typing", (data) => socket.broadcast.emit("typingResponse", data));
-});
-
 //Use flash messages for errors, info, ect...
 app.use(flash());
 
@@ -105,4 +76,36 @@ app.use("/conversation", conversationRoutes);
 //Server Running
 http.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}, you better catch it!`);
+});
+
+const io = require("socket.io")(http, {
+	cors: {
+		origin: "http://localhost:3001",
+		credentials: true,
+	},
+});
+
+global.onlineUsers = new Map();
+
+//socketio
+io.on("connection", (socket) => {
+	global.chatSocket = socket;
+	console.log(`Alert: ${socket.id} user just connected!`);
+	socket.on("add-user", (userId) => {
+		onlineUsers.set(userId, socket.id);
+	});
+
+	socket.on("send-msg", (data) => {
+		console.log("sendmsg", data);
+		const sendUserSocket = onlineUsers.get(data.chatref);
+		if (sendUserSocket) {
+			socket.to(sendUserSocket).emit("msg-recieve", data.message);
+		}
+	});
+
+	socket.on("typing", (data) => socket.broadcast.emit("typingResponse", data));
+
+	socket.on("disconnect", () => {
+		console.log("A user disconnected");
+	});
 });
