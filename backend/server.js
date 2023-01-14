@@ -24,7 +24,7 @@ require("./config/passport")(passport);
 
 app.use(
 	cors({
-		origin: "http://locahost:3000",
+		origin: "http://locahost:3001",
 		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
 		credentials: true,
 	})
@@ -80,7 +80,7 @@ http.listen(PORT, () => {
 
 const io = require("socket.io")(http, {
 	cors: {
-		origin: "http://localhost:3001",
+		origin: "http://localhost:3000",
 		credentials: true,
 	},
 });

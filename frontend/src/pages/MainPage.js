@@ -25,11 +25,6 @@ const MainPage = () => {
 
 	const socket = useRef();
 
-	//local states
-	const [messages, setMessages] = useState([]);
-	const [typingStatus, setTypingStatus] = useState(false);
-	const lastMessageRef = useRef(null);
-
 	const navigate = useNavigate();
 
 	//Redirect to login if no user found, storing the user in context
@@ -44,10 +39,10 @@ const MainPage = () => {
 
 	useEffect(() => {
 		if (currentUser) {
-			socket.current = io("http://localhost:3001");
+			socket.current = io("http://localhost:3000");
 			socket.current.emit("add-user", currentUser._id);
 		}
-	});
+	}, [currentUser]);
 
 	return (
 		<main className="homepage">

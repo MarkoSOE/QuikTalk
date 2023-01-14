@@ -2,10 +2,8 @@ import ChatContext from "../ChatContext";
 import { useState, useEffect, useContext, useRef, useCallback } from "react";
 import axios from "axios";
 import DisplayMessage from "../components/Chat/DisplayMessage";
-import Cookies from "js-cookie";
-import { io } from "socket.io-client";
 
-var socket, selectedChatCompare;
+var selectedChatCompare;
 
 const ChatView = ({ socket }) => {
 	const {
@@ -25,61 +23,65 @@ const ChatView = ({ socket }) => {
 	const [typing, setTyping] = useState(false);
 	const [arrivalMessage, setArrivalMessage] = useState(null);
 
-	//userinfo
-	useState(() => {
-		const data = Cookies.get("userid");
-		setCurrentUser(data);
-	}, []);
-
 	//get all messages
-	useEffect(() => {
-		fetchAllMessages();
-		selectedChatCompare = selectedChat;
-	}, [selectedChat]);
-
 	const fetchAllMessages = async () => {
 		if (!selectedChat) return;
 		try {
 			const { data } = await axios.get(`/message/${selectedChat?._id}`);
 			console.log(data);
 			setAllMessages(data);
-			// socket.emit("join chat", selectedChat?._id);
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
-	//listen for new messages
 	useEffect(() => {
-		socket.on("messageResponse", (data) => {
-			setAllMessages([...allMessages, data]);
-		});
-	}, [socket, allMessages]);
+		fetchAllMessages();
+		selectedChatCompare = selectedChat;
+	}, [selectedChat]);
 
+	//listen for new messages
+	// useEffect(() => {
+	// 	socket.current.on("messageResponse", (data) => {
+	// 		setAllMessages([...allMessages, data]);
+	// 	});
+	// }, [socket, allMessages]);
+
+	//hold on for now
 	const handleTyping = () => {
-		socket.emit("typing", `${currentUser._id} is typing...`);
+		// socket.emit("typing", `${currentUser._id} is typing...`);
 	};
 
-	const recieveMessage = useCallback(() => {
+	// const recieveMessage = useCallback(() => {
+	// 	if (socket.current) {
+	// 		socket.current.on("msg-receive", (msg) => {
+	// 			console.log({ msg });
+	// 			setArrivalMessage({
+	// 				chatId: msg.chatId,
+	// 				message: msg.message,
+	// 				sender: msg.sender,
+	// 			});
+	// 		});
+	// 	}
+	// }, []);
+
+	// useEffect(() => {
+	// 	recieveMessage();
+	// }, [recieveMessage]);
+
+	//socket checks for a message being
+	useEffect(() => {
 		if (socket.current) {
 			socket.current.on("msg-receive", (msg) => {
-				console.log({ msg });
-				setArrivalMessage({
-					chatId: msg.chatId,
-					message: msg.message,
-					sender: msg.sender,
-				});
+				console.log(msg);
+				setArrivalMessage({ msg });
 			});
 		}
 	}, []);
 
 	useEffect(() => {
-		recieveMessage();
-	}, [recieveMessage]);
-
-	useEffect(() => {
 		arrivalMessage &&
-			selectedChatCompare?._id === arrivalMessage?.chatId &&
+			// selectedChatCompare?._id === arrivalMessage?.chatId &&
 			setAllMessages((prev) => [...prev, arrivalMessage]);
 	}, [arrivalMessage]);
 
@@ -97,7 +99,11 @@ const ChatView = ({ socket }) => {
 					message: newMessage,
 					chatID: selectedChat?._id,
 				});
-				// socket.current.emit("message", data);
+				socket.current.emit("message", {
+					user: currentUser,
+					message: newMessage,
+					chatID: selectedChat?._id,
+				});
 				setAllMessages([...allMessages, data]);
 				setNewMessage("");
 				setTyping(false);

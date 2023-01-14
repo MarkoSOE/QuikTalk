@@ -63,8 +63,6 @@ export default function Example() {
 		}
 	}, [navigate]);
 
-	//check to see if user is already logged in
-
 	return (
 		<>
 			<div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
