@@ -31,13 +31,14 @@ const MainPage = () => {
 			navigate("/");
 		} else {
 			setCurrentUser(user);
+			console.log(currentUser);
 		}
 	}, []);
 
 	return (
 		<main className="homepage">
 			{showMessageList && <SideBar />}
-			{showChatBox && <ChatView />}
+			{showChatBox && <ChatView currentUser={currentUser} />}
 		</main>
 	);
 };

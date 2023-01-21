@@ -90,6 +90,7 @@ io.on("connection", (socket) => {
 	console.log(`Alert: ${socket.id} user just connected!`);
 
 	socket.on("setup", (userData) => {
+		console.log(JSON.parse(userData));
 		socket.join(userData._id);
 		console.log(`${userData.firstname} is online`);
 		socket.emit("connected");

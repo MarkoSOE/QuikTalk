@@ -50,6 +50,7 @@ export default function Example() {
 			const data = await axios.post("/login", body, config);
 			//store the user data in localstorage
 			localStorage.setItem("user", JSON.stringify(data.data));
+			//store the user as currentUser
 			window.location.href = "/homepage";
 		} catch (error) {
 			console.error(error);

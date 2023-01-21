@@ -8,7 +8,7 @@ var selectedChatCompare;
 
 const socket = io();
 
-const ChatView = () => {
+const ChatView = ({ currentUser }) => {
 	//global states
 	const {
 		selectedChat,
@@ -16,8 +16,6 @@ const ChatView = () => {
 		setShowChatBox,
 		setShowMessageList,
 		setSelectedChat,
-		currentUser,
-		setCurrentUser,
 	} = useContext(ChatContext);
 
 	//local states
@@ -31,7 +29,7 @@ const ChatView = () => {
 
 	//socket.io
 	useEffect(() => {
-		socket.emit("setup", currentUser);
+		socket.emit("setup", JSON.stringify(currentUser));
 		socket.on("connected", () => {
 			setSocketConnected(true);
 		});
