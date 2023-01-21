@@ -78,34 +78,34 @@ http.listen(PORT, () => {
 	console.log(`Server is running on port ${PORT}, you better catch it!`);
 });
 
+//Initializing Socket.Io
 const io = require("socket.io")(http, {
 	cors: {
 		origin: "http://localhost:3000",
-		credentials: true,
 	},
 });
 
-global.onlineUsers = new Map();
-
 //socketio
 io.on("connection", (socket) => {
-	global.chatSocket = socket;
 	console.log(`Alert: ${socket.id} user just connected!`);
-	socket.on("add-user", (userId) => {
-		onlineUsers.set(userId, socket.id);
+
+	socket.on("setup", (userData) => {
+		socket.join(userData._id);
+		console.log(`${userData.firstname} is online`);
+		socket.emit("connected");
 	});
 
-	socket.on("send-msg", (data) => {
-		console.log("sendmsg", data);
-		const sendUserSocket = onlineUsers.get(data.chatref);
-		if (sendUserSocket) {
-			socket.to(sendUserSocket).emit("msg-recieve", data.message);
-		}
+	socket.on("join chat", (room) => {
+		socket.join(room);
+		console.log(`User joined room: ${room}`);
 	});
 
-	socket.on("typing", (data) => socket.broadcast.emit("typingResponse", data));
+	socket.on("new message", (newMessageRecieved) => {
+		socket.broadcast.emit("message recieved", newMessageRecieved);
+	});
 
 	socket.on("disconnect", () => {
 		console.log("A user disconnected");
+		socket.disconnect();
 	});
 });

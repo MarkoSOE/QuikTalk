@@ -2,10 +2,14 @@ import ChatContext from "../ChatContext";
 import { useState, useEffect, useContext, useRef, useCallback } from "react";
 import axios from "axios";
 import DisplayMessage from "../components/Chat/DisplayMessage";
+import io from "socket.io-client";
 
 var selectedChatCompare;
 
-const ChatView = ({ socket }) => {
+const socket = io();
+
+const ChatView = () => {
+	//global states
 	const {
 		selectedChat,
 		setUserIsTyping,
@@ -16,79 +20,44 @@ const ChatView = ({ socket }) => {
 		setCurrentUser,
 	} = useContext(ChatContext);
 
-	const scrollRef = useRef();
-
+	//local states
 	const [newMessage, setNewMessage] = useState("");
 	const [allMessages, setAllMessages] = useState();
+	const [socketConnected, setSocketConnected] = useState(false);
 	const [typing, setTyping] = useState(false);
 	const [arrivalMessage, setArrivalMessage] = useState(null);
+
+	const scrollRef = useRef();
+
+	//socket.io
+	useEffect(() => {
+		socket.emit("setup", currentUser);
+		socket.on("connected", () => {
+			setSocketConnected(true);
+		});
+
+		socket.on("disconnected", () => {
+			setSocketConnected(false);
+		});
+		return () => {
+			socket.off("connecteed");
+			socket.off("disconnected");
+		};
+	}, []);
 
 	//get all messages
 	const fetchAllMessages = async () => {
 		if (!selectedChat) return;
 		try {
 			const { data } = await axios.get(`/message/${selectedChat?._id}`);
-			console.log(data);
 			setAllMessages(data);
+			socket.emit("join chat", selectedChat._id);
 		} catch (error) {
 			console.error(error);
 		}
 	};
 
-	useEffect(() => {
-		fetchAllMessages();
-		selectedChatCompare = selectedChat;
-	}, [selectedChat]);
-
-	//listen for new messages
-	// useEffect(() => {
-	// 	socket.current.on("messageResponse", (data) => {
-	// 		setAllMessages([...allMessages, data]);
-	// 	});
-	// }, [socket, allMessages]);
-
-	//hold on for now
-	const handleTyping = () => {
-		// socket.emit("typing", `${currentUser._id} is typing...`);
-	};
-
-	// const recieveMessage = useCallback(() => {
-	// 	if (socket.current) {
-	// 		socket.current.on("msg-receive", (msg) => {
-	// 			console.log({ msg });
-	// 			setArrivalMessage({
-	// 				chatId: msg.chatId,
-	// 				message: msg.message,
-	// 				sender: msg.sender,
-	// 			});
-	// 		});
-	// 	}
-	// }, []);
-
-	// useEffect(() => {
-	// 	recieveMessage();
-	// }, [recieveMessage]);
-
-	//socket checks for a message being
-	useEffect(() => {
-		if (socket.current) {
-			socket.current.on("msg-receive", (msg) => {
-				console.log(msg);
-				setArrivalMessage({ msg });
-			});
-		}
-	}, []);
-
-	useEffect(() => {
-		arrivalMessage &&
-			// selectedChatCompare?._id === arrivalMessage?.chatId &&
-			setAllMessages((prev) => [...prev, arrivalMessage]);
-	}, [arrivalMessage]);
-
-	useEffect(() => {
-		scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-	}, [allMessages]);
-
+	//send message
 	const sendMessage = async (e) => {
 		e.preventDefault();
 		if (newMessage.trim().length === 0) return;
@@ -99,19 +68,38 @@ const ChatView = ({ socket }) => {
 					message: newMessage,
 					chatID: selectedChat?._id,
 				});
-				socket.current.emit("message", {
-					user: currentUser,
-					message: newMessage,
-					chatID: selectedChat?._id,
-				});
-				setAllMessages([...allMessages, data]);
+				console.log(data);
 				setNewMessage("");
 				setTyping(false);
+				socket.emit("new message", data);
+				setAllMessages([...allMessages, data]);
 			} catch (error) {
 				console.error(error);
 			}
 		}
 	};
+
+	useEffect(() => {
+		fetchAllMessages();
+		selectedChatCompare = selectedChat;
+	}, [selectedChat]);
+
+	useEffect(() => {
+		socket.on("message recieved", (newMessageRecieved) => {
+			if (
+				!selectedChatCompare ||
+				selectedChatCompare?._id !== newMessageRecieved?.chatref?._id
+			) {
+				console.log("will notify");
+			} else {
+				setAllMessages((prev) => [...prev, newMessageRecieved]);
+			}
+		});
+	}, []);
+
+	useEffect(() => {
+		scrollRef.current?.scrollIntoView({ behavior: "smooth" });
+	}, [allMessages]);
 
 	const userTyping = async (e) => {
 		setNewMessage(e.target.value);
@@ -181,11 +169,7 @@ const ChatView = ({ socket }) => {
 						)}
 					</div>
 					<div className="open-msg-box">
-						<DisplayMessage
-							messages={allMessages}
-							socket={socket}
-							scrollRef={scrollRef}
-						/>
+						<DisplayMessage messages={allMessages} scrollRef={scrollRef} />
 					</div>
 					<div className="message-status">
 						<p> </p>
@@ -197,7 +181,7 @@ const ChatView = ({ socket }) => {
 								placeholder="Send a message"
 								className="send-msg-input"
 								onChange={userTyping}
-								onKeyDown={handleTyping}
+								// onKeyDown={handleTyping}
 								value={newMessage}
 							></input>
 						</form>

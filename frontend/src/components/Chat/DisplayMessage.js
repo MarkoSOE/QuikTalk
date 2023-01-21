@@ -4,10 +4,9 @@ import React, {
 	useInsertionEffect,
 	useRef,
 } from "react";
-import { Socket } from "socket.io-client";
 import ChatContext from "../../ChatContext";
 
-const DisplayMessage = ({ messages, socket, scrollRef }) => {
+const DisplayMessage = ({ messages, scrollRef }) => {
 	const currentTime = new Date();
 
 	const { selectedChat, userIsTyping } = useContext(ChatContext);
