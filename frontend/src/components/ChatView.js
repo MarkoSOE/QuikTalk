@@ -6,7 +6,7 @@ import io from "socket.io-client";
 
 var selectedChatCompare;
 
-const socket = io();
+const socket = io("http://localhost:3000");
 
 const ChatView = ({ currentUser }) => {
 	//global states
@@ -29,9 +29,9 @@ const ChatView = ({ currentUser }) => {
 
 	//socket.io
 	useEffect(() => {
-		socket.emit("setup", JSON.stringify(currentUser));
 		socket.on("connected", () => {
 			setSocketConnected(true);
+			socket.emit("setup", currentUser);
 		});
 
 		socket.on("disconnected", () => {
@@ -66,7 +66,6 @@ const ChatView = ({ currentUser }) => {
 					message: newMessage,
 					chatID: selectedChat?._id,
 				});
-				console.log(data);
 				setNewMessage("");
 				setTyping(false);
 				socket.emit("new message", data);
@@ -84,6 +83,8 @@ const ChatView = ({ currentUser }) => {
 
 	useEffect(() => {
 		socket.on("message recieved", (newMessageRecieved) => {
+			console.log(newMessageRecieved);
+			console.log(selectedChatCompare);
 			if (
 				!selectedChatCompare ||
 				selectedChatCompare?._id !== newMessageRecieved?.chatref?._id
