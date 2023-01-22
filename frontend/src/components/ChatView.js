@@ -6,7 +6,7 @@ import io from "socket.io-client";
 
 var selectedChatCompare;
 
-const socket = io("http://localhost:3000");
+const socket = io("http://localhost:3001");
 
 const ChatView = ({ currentUser }) => {
 	//global states
@@ -69,7 +69,7 @@ const ChatView = ({ currentUser }) => {
 				setNewMessage("");
 				setTyping(false);
 				socket.emit("new message", data);
-				setAllMessages([...allMessages, data]);
+				setAllMessages([...allMessages, data.data]);
 			} catch (error) {
 				console.error(error);
 			}
@@ -83,11 +83,9 @@ const ChatView = ({ currentUser }) => {
 
 	useEffect(() => {
 		socket.on("message recieved", (newMessageRecieved) => {
-			console.log(newMessageRecieved);
-			console.log(selectedChatCompare);
 			if (
 				!selectedChatCompare ||
-				selectedChatCompare?._id !== newMessageRecieved?.chatref?._id
+				selectedChatCompare?._id !== newMessageRecieved?.chatref
 			) {
 				console.log("will notify");
 			} else {

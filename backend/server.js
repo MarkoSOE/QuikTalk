@@ -97,11 +97,11 @@ io.on("connection", (socket) => {
 
 	socket.on("join chat", (room) => {
 		socket.join(room);
-		console.log(`User joined room: ${room}`);
+		console.log(`User with ID: ${socket.id}joined room: ${room}`);
 	});
 
 	socket.on("new message", (newMessageRecieved) => {
-		socket.broadcast.emit("message recieved", newMessageRecieved);
+		socket.broadcast.emit("message recieved", newMessageRecieved.data);
 	});
 
 	socket.on("disconnect", () => {
