@@ -2,6 +2,10 @@
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+## TO DO :
+
+- Create avatar selection system for new users upon signup and assign existing users avatars. To be stored using cloudinary
+
 ## Available Scripts
 
 In the project directory, you can run:
