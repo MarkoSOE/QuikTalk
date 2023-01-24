@@ -6,6 +6,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - Create avatar selection system for new users upon signup and assign existing users avatars. To be stored using cloudinary
 
+- Add a transition when logging in or signing up before going into the mainpage
+
+- Show notifications in the front end when errors occur during signup or login
+
 ## Available Scripts
 
 In the project directory, you can run:
