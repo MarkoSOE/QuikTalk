@@ -1,169 +1,163 @@
-/*
-  This example requires some changes to your config:
-  
-  ```
-  // tailwind.config.js
-  module.exports = {
-    // ...
-    plugins: [
-      // ...
-      require('@tailwindcss/forms'),
-    ],
-  }
-  ```
-*/
+import React from "react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import axios from "axios";
+import Logo from "../assets/tailwind.png";
 
-import React from 'react'
-import { useState, useEffect } from 'react'
-import axios from 'axios'
+export default function Signup() {
+	const [formData, setFormData] = useState({
+		firstname: "",
+		lastname: "",
+		email: "",
+		password: "",
+		confirmpassword: "",
+	});
+	const { firstname, lastname, email, password, confirmpassword } = formData;
+	const navigate = useNavigate();
 
+	const onChange = (e) =>
+		setFormData({ ...formData, [e.target.name]: e.target.value.toLowerCase() });
 
-const Signup = () => {
+	const onSubmit = async (e) => {
+		e.preventDefault();
+		console.log(formData);
+		const newUser = {
+			firstname,
+			lastname,
+			email,
+			password,
+			confirmpassword,
+		};
+		try {
+			const config = {
+				headers: {
+					"Content-Type": "application/json",
+				},
+			};
+			const body = JSON.stringify(newUser);
+			await axios.post("/signup", body, config).then((res) => {
+				console.log(res.data);
+				window.location.href = "/";
+			});
+		} catch (error) {
+			console.log(error.res.data);
+		}
+	};
+	return (
+		<>
+			<FormContainer>
+				<form action="" onSubmit={onSubmit}>
+					<div className="brand">
+						<img src={Logo}></img>
+						<h1>QuikTalk</h1>
+					</div>
+					<span>
+						{" "}
+						Already have an account? <Link to="/"> Log in</Link>{" "}
+					</span>
+					<input
+						type="text"
+						placeholder="First Name"
+						name="firstname"
+						onChange={onChange}
+					/>
+					<input
+						type="text"
+						placeholder="Last Name"
+						name="lastname"
+						onChange={onChange}
+					/>
+					<input
+						type="email"
+						placeholder="Email"
+						name="email"
+						onChange={onChange}
+					/>
+					<input
+						type="password"
+						placeholder="Password"
+						name="password"
+						onChange={onChange}
+					/>
+					<input
+						type="password"
+						placeholder="Confirm Password"
+						name="confirmpassword"
+						onChange={onChange}
+					/>
+					<button type="submit"> Signup</button>
+				</form>
+			</FormContainer>
+		</>
+	);
+}
 
-    const [formData, setFormData] = useState({
-        firstname: '',
-        lastname: '',
-        email: '',
-        password: '',
-        confirmpassword: ''
-    })
-    const { firstname, lastname, email, password, confirmpassword } = formData
-
-    const onChange = e => setFormData({ ...formData, [e.target.name]: e.target.value.toLowerCase() })
-
-    const onSubmit = async e => {
-        e.preventDefault()
-        console.log(formData)
-        const newUser = {
-            firstname,
-            lastname,
-            email,
-            password,
-            confirmpassword
-        }
-        try {
-            const config = {
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }
-            const body = JSON.stringify(newUser)
-            await axios.post('/signup', body, config)
-            .then(res => {
-                console.log(res.data)
-                window.location.href = '/'
-            })
-        } catch (error) {      
-            console.log(error.res.data);      
-        }
-    }
-    return (
-        <>
-        <div className="flex min-h-full items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="w-full max-w-md space-y-8">
-                <div>
-                    <img
-                    className="mx-auto h-12 w-auto"
-                    src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-                    alt="Your Company"
-                    />
-                    <h2 className="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900">
-                    Signup for an account
-                    </h2>
-                    <p className="mt-2 text-center text-sm text-gray-600">
-                        If you have an account: {' '}
-                        <a href="/" className="font-medium text-indigo-600 hover:text-indigo-500">
-                            Sign in
-                        </a>
-                    </p>
-                </div>
-            <form className="mt-8 space-y-6" onSubmit={onSubmit} method="POST">
-                    <input type="hidden" name="remember" defaultValue="true" />
-                        <div className="-space-y-px rounded-md shadow-sm">
-                            <div>
-                                <label htmlFor="firstname" className="sr-only">
-                                First Name
-                                </label>
-                                <input
-                                id="firstname"
-                                name="firstname"
-                                type="text"
-                                required
-                                className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                placeholder="First Name"
-                                onChange={onChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="lastname" className="sr-only">
-                                Last Name
-                                </label>
-                                <input
-                                id="lastname"
-                                name="lastname"
-                                type="text"
-                                required
-                                className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Last Name"
-                                onChange={onChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="email" className="sr-only">
-                                Email
-                                </label>
-                                <input
-                                id="email"
-                                name="email"
-                                type="email"
-                                required
-                                className="relative block w-full appearance-none rounded-none rounded-t-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Email"
-                                onChange={onChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="password" className="sr-only">
-                                Password
-                                </label>
-                                <input
-                                id="password"
-                                name="password"
-                                type="password"
-                                required
-                                className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Password"
-                                onChange={onChange}
-                                />
-                            </div>
-                            <div>
-                                <label htmlFor="confirmpassword" className="sr-only">
-                                Confirm Password
-                                </label>
-                                <input
-                                id="confirmpassword"
-                                name="confirmpassword"
-                                type="password"
-                                required
-                                className="relative block w-full appearance-none rounded-none rounded-b-md border border-gray-300 px-3 py-2 text-gray-900 placeholder-gray-500 focus:z-10 focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
-                                placeholder="Confirm Password"
-                                onChange={onChange}
-                                />
-                            </div>
-                        </div>
-                        <div>
-                            <button
-                                type="submit"
-                                className="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                            >
-                                <span className="absolute inset-y-0 left-0 flex items-center pl-3">
-                                </span>
-                                Sign up
-                            </button>
-                        </div>
-                </form>    
-            </div>
-        </div>
-    </>
-)}
-export default Signup
+const FormContainer = styled.div`
+	height: 100vh;
+	width: 100vw;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	gap: 1rem;
+	align-items: center;
+	background-color: #131324;
+	.brand {
+		display: flex;
+		align-items: center;
+		gap: 1rem;
+		justify-content: center;
+		img {
+			height: 5rem;
+		}
+		h1 {
+			color: white;
+			text-transform: uppercase;
+		}
+	}
+	form {
+		display: flex;
+		flex-direction: column;
+		gap: 2rem;
+		background-color: #00000076;
+		border-radius: 2rem;
+		padding: 5rem;
+	}
+	input {
+		background-color: transparent;
+		padding: 1rem;
+		border: 0.1rem solid #4e0eff;
+		border-radius: 0.4rem;
+		color: white;
+		width: 100%;
+		font-size: 1rem;
+		&:focus {
+			border: 0.1rem solid #997af0;
+			outline: none;
+		}
+	}
+	button {
+		background-color: #4e0eff;
+		color: white;
+		padding: 1rem 2rem;
+		border: none;
+		font-weight: bold;
+		cursor: pointer;
+		border-radius: 0.4rem;
+		font-size: 1rem;
+		text-transform: uppercase;
+		&:hover {
+			background-color: #4e0eff;
+		}
+	}
+	span {
+		color: white;
+		text-transform: uppercase;
+		a {
+			color: #4e0eff;
+			text-decoration: none;
+			font-weight: bold;
+		}
+		text-align: center;
+	}
+`;

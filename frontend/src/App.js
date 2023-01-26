@@ -12,6 +12,7 @@ const App = () => {
 			<ChatProvider>
 				<Routes>
 					<Route path="/" element={<Login />} />
+					<Route path="/login" element={<Login />} />
 					<Route path="/homepage" element={<MainPage />} exact />
 					<Route path="/signup" element={<Signup />} exact />
 				</Routes>
