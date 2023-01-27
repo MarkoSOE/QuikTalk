@@ -2,7 +2,6 @@ import React from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { LockClosedIcon } from "@heroicons/react/20/solid";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Logo from "../assets/tailwind.png";
@@ -14,7 +13,7 @@ export default function Login() {
 		position: "bottom-right",
 		autoClose: 8000,
 		pauseOnHover: true,
-		draggable: false,
+		draggable: true,
 		theme: "dark",
 	};
 	const navigate = useNavigate();
@@ -23,7 +22,6 @@ export default function Login() {
 		email: "",
 		password: "",
 	});
-	const { email, password } = formData;
 
 	const onChange = (e) =>
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -41,9 +39,9 @@ export default function Login() {
 	};
 
 	const onSubmit = async (e) => {
-		console.log(formData);
 		e.preventDefault();
-		if (formValidation) {
+		if (formValidation()) {
+			const { email, password } = formData;
 			const newUser = {
 				email,
 				password,
@@ -64,6 +62,7 @@ export default function Login() {
 				window.location.href = "/homepage";
 			} catch (error) {
 				console.error(error);
+				toast.error(`Invalid email or password`, toastOptions);
 			}
 		}
 	};
@@ -88,7 +87,7 @@ export default function Login() {
 						Don't have an account? <Link to="/Signup"> Create one</Link>{" "}
 					</span>
 					<input
-						type="email"
+						type="text"
 						placeholder="Email"
 						name="email"
 						onChange={onChange}
@@ -102,7 +101,7 @@ export default function Login() {
 					<button type="submit"> Log In</button>
 				</form>
 			</FormContainer>
-			<ToastContainer></ToastContainer>
+			<ToastContainer />
 		</>
 	);
 }

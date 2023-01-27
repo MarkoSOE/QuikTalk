@@ -4,6 +4,7 @@ import { Link, useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import axios from "axios";
 import Logo from "../assets/tailwind.png";
+import { toast, ToastContainer } from "react-toastify";
 
 export default function Signup() {
 	const [formData, setFormData] = useState({
@@ -14,34 +15,57 @@ export default function Signup() {
 		confirmpassword: "",
 	});
 	const { firstname, lastname, email, password, confirmpassword } = formData;
+	const toastOptions = {
+		position: "bottom-right",
+		autoClose: 8000,
+		pauseOnHover: true,
+		draggable: true,
+		theme: "dark",
+	};
 	const navigate = useNavigate();
 
 	const onChange = (e) =>
 		setFormData({ ...formData, [e.target.name]: e.target.value.toLowerCase() });
 
+	const formValidation = () => {
+		if (firstname === "" || lastname === "") {
+			toast.error("Name is required", toastOptions);
+			return false;
+		} else if (email === "" || password === "") {
+			toast.error("Email and Password is required", toastOptions);
+			return false;
+		} else if (password !== confirmpassword) {
+			toast.error("Password do not match", toastOptions);
+			return false;
+		}
+		return true;
+	};
+
 	const onSubmit = async (e) => {
 		e.preventDefault();
-		console.log(formData);
-		const newUser = {
-			firstname,
-			lastname,
-			email,
-			password,
-			confirmpassword,
-		};
-		try {
-			const config = {
-				headers: {
-					"Content-Type": "application/json",
-				},
+		if (formValidation()) {
+			const newUser = {
+				firstname,
+				lastname,
+				email,
+				password,
+				confirmpassword,
 			};
-			const body = JSON.stringify(newUser);
-			await axios.post("/signup", body, config).then((res) => {
-				console.log(res.data);
-				window.location.href = "/";
-			});
-		} catch (error) {
-			console.log(error.res.data);
+			try {
+				const config = {
+					headers: {
+						"Content-Type": "application/json",
+					},
+				};
+				const body = JSON.stringify(newUser);
+				await axios.post("/signup", body, config).then((res) => {
+					localStorage.setItem("user", JSON.stringify(res.data));
+					window.location.href = "/setAvatar";
+				});
+			} catch (error) {
+				console.log(error.res.data);
+				//add toast messages here
+			}
 		}
 	};
 	return (
@@ -89,6 +113,7 @@ export default function Signup() {
 					<button type="submit"> Signup</button>
 				</form>
 			</FormContainer>
+			<ToastContainer />
 		</>
 	);
 }
