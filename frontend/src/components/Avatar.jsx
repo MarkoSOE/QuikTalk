@@ -44,21 +44,20 @@ export default function Avatar() {
 		const getAvatar = async () => {
 			const data = [];
 			for (let i = 0; i < 1; i++) {
-				fetch(
+				// fetch(
+				// 	`https://api.multiavatar.com/4645646/${Math.round(
+				// 		Math.random() * 1000
+				// 	)}`
+				// )
+				// 	.then((res) => res.text())
+				// 	.then((svg) => data.push(svg));
+				const svg = await axios.get(
 					`https://api.multiavatar.com/4645646/${Math.round(
 						Math.random() * 1000
 					)}`
-				)
-					.then((res) => res.text())
-					.then((svg) => data.push(svg));
-				// const svg = await axios.get(
-				// 	`https://api.multiavatar.com/4645646/${Math.round(
-				// 		Math.random() * 1000
-				// 	)}`.text()
-				// );
-				// const buffer = new Buffer(svg.data);
-				// data.push(svg.toString("base64"));
-				// data.push(svg);
+				);
+				const buffer = new Buffer(svg.data);
+				data.push(buffer.toString("base64"));
 				console.log(data);
 			}
 			console.log(data);
@@ -80,8 +79,14 @@ export default function Avatar() {
 					<div className="avatars">
 						{avatars.map((avatar, index) => {
 							return (
+								// <img
+								// 	src={`data:image/svg+xml;utf8,${encodeURIComponent(avatar)}`}
+								// 	alt="avatar"
+								// 	key={avatar}
+								// 	onClick={() => setSelectedAvatar(index)}
+								// />
 								<img
-									src={`data:image/svg+xml;utf8,${avatar}`}
+									src={`data:image/svg+xml;base64,${avatar}`}
 									alt="avatar"
 									key={avatar}
 									onClick={() => setSelectedAvatar(index)}
