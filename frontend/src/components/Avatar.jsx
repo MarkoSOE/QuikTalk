@@ -8,7 +8,7 @@ import axios from "axios";
 import { useContext } from "react";
 import ChatContext from "../ChatContext";
 import multiavatar from "@multiavatar/multiavatar/esm";
-import { Buffer } from "buffer";
+import * as buffer from "buffer";
 
 export default function Avatar() {
 	//global states
@@ -56,7 +56,7 @@ export default function Avatar() {
 						Math.random() * 1000
 					)}`
 				);
-				const buffer = new Buffer(svg.data);
+				const buffer = new buffer.Buffer(svg.data);
 				data.push(buffer.toString("base64"));
 				console.log(data);
 			}
