@@ -54,7 +54,7 @@ export default function Avatar() {
 				const svg = await axios.get(
 					`https://api.multiavatar.com/4645646/${Math.round(
 						Math.random() * 1000
-					)}.svg`
+					)}`
 				);
 				data.push(svg.data);
 			}
