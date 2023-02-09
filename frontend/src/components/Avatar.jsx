@@ -7,8 +7,8 @@ import { Link, redirect, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import ChatContext from "../ChatContext";
-import multiavatar from "@multiavatar/multiavatar/esm";
-import * as buffer from "buffer";
+import { createAvatar } from "@dicebear/core";
+import { bottts } from "@dicebear/collection";
 
 export default function Avatar() {
 	//global states
@@ -54,13 +54,12 @@ export default function Avatar() {
 				const svg = await axios.get(
 					`https://api.multiavatar.com/4645646/${Math.round(
 						Math.random() * 1000
-					)}`
+					)}.svg`
 				);
-				const buffer = new buffer.Buffer(svg.data);
-				data.push(buffer.toString("base64"));
-				console.log(data);
+				data.push(svg.data);
 			}
 			console.log(data);
+			console.log(typeof data[0]);
 			setAvatars(data);
 			setIsLoading(false);
 		};
