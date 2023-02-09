@@ -9,6 +9,7 @@ import { useContext } from "react";
 import ChatContext from "../ChatContext";
 import { createAvatar } from "@dicebear/core";
 import { bottts } from "@dicebear/collection";
+import { Buffer } from "buffer";
 
 export default function Avatar() {
 	//global states
@@ -40,26 +41,19 @@ export default function Avatar() {
 	// };
 
 	//generate 5 random avatars by API call
+
 	useEffect(() => {
 		const getAvatar = async () => {
 			const data = [];
 			for (let i = 0; i < 1; i++) {
-				// fetch(
-				// 	`https://api.multiavatar.com/4645646/${Math.round(
-				// 		Math.random() * 1000
-				// 	)}`
-				// )
-				// 	.then((res) => res.text())
-				// 	.then((svg) => data.push(svg));
 				const svg = await axios.get(
 					`https://api.multiavatar.com/4645646/${Math.round(
 						Math.random() * 1000
-					)}`
+					)}.svg`
 				);
-				data.push(svg.data);
+				const base64 = new Buffer.from(svg.data).toString("base64");
+				data.push(base64);
 			}
-			console.log(data);
-			console.log(typeof data[0]);
 			setAvatars(data);
 			setIsLoading(false);
 		};
@@ -78,18 +72,12 @@ export default function Avatar() {
 					<div className="avatars">
 						{avatars.map((avatar, index) => {
 							return (
-								// <img
-								// 	src={`data:image/svg+xml;utf8,${encodeURIComponent(avatar)}`}
-								// 	alt="avatar"
-								// 	key={avatar}
-								// 	onClick={() => setSelectedAvatar(index)}
-								// />
-								<img
-									src={`data:image/svg+xml;base64,${avatar}`}
-									alt="avatar"
-									key={avatar}
-									onClick={() => setSelectedAvatar(index)}
-								/>
+								<div className={`avatar`}>
+									<img
+										src={`data:image/svg+xml;base62,${avatar}`}
+										alt="avatar"
+									/>
+								</div>
 							);
 						})}
 					</div>
