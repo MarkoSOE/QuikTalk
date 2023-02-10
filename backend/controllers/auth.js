@@ -95,15 +95,6 @@ exports.postLogin = (req, res, next) => {
 	})(req, res, next);
 };
 
-// exports.getSignup = (req, res) => {
-//   if (req.user) {
-//     return res.redirect("/profile");
-//   }
-//   res.render("signup", {
-//     title: "Create Account",
-//   });
-// };
-
 exports.postSignup = async (req, res, next) => {
 	try {
 		let { firstname, lastname, email, password, confirmpassword } = req.body;
@@ -160,3 +151,5 @@ exports.getCurrentUser = (req, res) => {
 		res.status(401).json("Unauthorized");
 	}
 };
+
+exports.setAvatarProfilePicture = (req, res) => {

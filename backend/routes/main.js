@@ -9,5 +9,6 @@ router.get("/logout", authController.logout);
 router.post("/signup", authController.postSignup);
 router.get("/singleuser", authController.getSingularUser);
 router.get("/currentuser", authController.getCurrentUser);
+router.get("/setAvatarProfilePicture", authController.setAvatarProfilePicture);
 
 module.exports = router;

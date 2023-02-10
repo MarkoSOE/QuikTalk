@@ -10,6 +10,7 @@ import ChatContext from "../ChatContext";
 import { createAvatar } from "@dicebear/core";
 import { bottts } from "@dicebear/collection";
 import { Buffer } from "buffer";
+import { toast } from "react-toastify";
 
 export default function Avatar() {
 	//global states
@@ -40,19 +41,24 @@ export default function Avatar() {
 	// 	}
 	// };
 
+	//sending the selected avatar to the backend
+	const setAvatarProfilePicture = async () => {
+		//send the avatar and the current user to the backend
+		if(selectedAvatar === undefined){
+			toast.error("Please select an avatar", toastOptions)
+		}
+		
 	//generate 5 random avatars by API call
-
 	useEffect(() => {
 		const getAvatar = async () => {
 			const data = [];
-			for (let i = 0; i < 1; i++) {
+			for (let i = 0; i < 5; i++) {
 				const svg = await axios.get(
 					`https://api.multiavatar.com/4645646/${Math.round(
 						Math.random() * 1000
-					)}.svg`
+					)}?apikey=VDf3oIYO07JnZF`
 				);
-				const base64 = new Buffer.from(svg.data).toString("base64");
-				data.push(base64);
+				data.push(svg.data);
 			}
 			setAvatars(data);
 			setIsLoading(false);
@@ -69,18 +75,27 @@ export default function Avatar() {
 				</Container>
 			) : (
 				<Container>
+					<div>
+						<h1>Choose your avatar</h1>
+					</div>
 					<div className="avatars">
 						{avatars.map((avatar, index) => {
 							return (
-								<div className={`avatar`}>
+								<div className={`avatar`} key={index}>
 									<img
-										src={`data:image/svg+xml;base62,${avatar}`}
-										alt="avatar"
+										src={`data:image/svg+xml;base64,${btoa(avatar)}`}
+										alt=""
+										width="100"
+										height="100"
+										onClick={() => {setSelectedAvatar(index)}}
 									/>
 								</div>
 							);
 						})}
 					</div>
+					<button onClick={setAvatarProfilePicture} className="submit-btn">
+						Set as profile picture
+					</button>
 				</Container>
 			)}
 		</>
