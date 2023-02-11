@@ -153,3 +153,9 @@ exports.getCurrentUser = (req, res) => {
 };
 
 exports.setAvatarProfilePicture = (req, res) => {
+	console.log(req);
+	console.log(req.body);
+	console.log("request recieved");
+	let { currentUser, image } = req.body;
+	console.log(currentUser, image);
+};

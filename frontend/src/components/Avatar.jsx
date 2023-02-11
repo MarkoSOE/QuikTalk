@@ -7,9 +7,6 @@ import { Link, redirect, useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import ChatContext from "../ChatContext";
-import { createAvatar } from "@dicebear/core";
-import { bottts } from "@dicebear/collection";
-import { Buffer } from "buffer";
 import { toast } from "react-toastify";
 
 export default function Avatar() {
@@ -23,36 +20,28 @@ export default function Avatar() {
 
 	const navigate = useNavigate();
 
-	// //find the current user logged in
-	// useEffect(() => {
-	// 	const user = JSON.parse(localStorage.getItem("user"));
-	// 	if (!user) {
-	// 		navigate("/");
-	// 	} else {
-	// 		setCurrentUser(user);
-	// 	}
-	// }, []);
-
-	// const selectAvatar = async () => {
-	// 	if (selectedAvatar === undefined) {
-	// 		//error message
-	// 	} else {
-	// 		//send the image: avatar[selectedavatar] information into the backend where the collection is stored
-	// 	}
-	// };
-
 	//sending the selected avatar to the backend
 	const setAvatarProfilePicture = async () => {
-		//send the avatar and the current user to the backend
-		if(selectedAvatar === undefined){
-			toast.error("Please select an avatar", toastOptions)
+		if (selectedAvatar === undefined) {
+			toast.error("Please select an avatar");
+		} else {
+			try {
+				const sendAvatar = await axios.post("/setAvatarProfilePicture", {
+					currentUser: currentUser,
+					image: avatars[selectedAvatar],
+				});
+				console.log(sendAvatar);
+			} catch (error) {
+				console.error(error);
+			}
 		}
-		
+	};
+
 	//generate 5 random avatars by API call
 	useEffect(() => {
 		const getAvatar = async () => {
 			const data = [];
-			for (let i = 0; i < 5; i++) {
+			for (let i = 0; i < 2; i++) {
 				const svg = await axios.get(
 					`https://api.multiavatar.com/4645646/${Math.round(
 						Math.random() * 1000
@@ -63,7 +52,6 @@ export default function Avatar() {
 			setAvatars(data);
 			setIsLoading(false);
 		};
-
 		getAvatar();
 	}, []);
 
@@ -87,7 +75,9 @@ export default function Avatar() {
 										alt=""
 										width="100"
 										height="100"
-										onClick={() => {setSelectedAvatar(index)}}
+										onClick={() => {
+											setSelectedAvatar(index);
+										}}
 									/>
 								</div>
 							);
