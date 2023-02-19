@@ -152,10 +152,24 @@ exports.getCurrentUser = (req, res) => {
 	}
 };
 
-exports.setAvatarProfilePicture = (req, res) => {
-	console.log(req);
-	console.log(req.body);
+exports.setAvatarProfilePicture = async (req, res) => {
 	console.log("request recieved");
+	console.log(req.body);
 	let { currentUser, image } = req.body;
-	console.log(currentUser, image);
+	console.log(currentUser);
+	console.log(image);
+
+	try {
+		//find the user matching the userID of currentUser
+		const foundUser = await User.findByIdAndUpdate(currentUser._id, {
+			avatar: image,
+		});
+		// res.status(200).send(foundUser);
+		return res.json({
+			isSet: true,
+			image: foundUser.avatar,
+		});
+	} catch (error) {
+		console.error(error);
+	}
 };
