@@ -153,11 +153,8 @@ exports.getCurrentUser = (req, res) => {
 };
 
 exports.setAvatarProfilePicture = async (req, res) => {
-	console.log("request recieved");
-	console.log(req.body);
+	console.log("Avatar Set Request Recieved");
 	let { currentUser, image } = req.body;
-	console.log(currentUser);
-	console.log(image);
 
 	try {
 		//find the user matching the userID of currentUser
