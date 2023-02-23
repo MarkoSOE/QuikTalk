@@ -91,3 +91,12 @@ exports.getConversationById = async (req, res) => {
 		console.error(error);
 	}
 };
+
+exports.getUserAvatars = async (req, res) => {
+	console.log("getting user avatars");
+	console.log(req.params.id);
+	// try {
+	// 	const userAvatars = await Conversation.findById(req.params.id).lean();
+	// 	console.log(userAvatars);
+	// } catch (error) {}
+};

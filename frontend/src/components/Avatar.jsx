@@ -10,6 +10,7 @@ import ChatContext from "../ChatContext";
 import { toast, ToastContainer } from "react-toastify";
 import { Buffer } from "buffer";
 import getImageDataURL from "../tools/svgBase64";
+import loading from "../assets/loading_gif.gif";
 
 export default function Avatar() {
 	//global states
@@ -18,7 +19,7 @@ export default function Avatar() {
 	//local states
 	const [avatars, setAvatars] = useState([]);
 	const [selectedAvatar, setSelectedAvatar] = useState(undefined);
-	const [isLoading, setIsLoading] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
 	const navigate = useNavigate();
 	const toastOptions = {
@@ -54,7 +55,7 @@ export default function Avatar() {
 				console.log(sendAvatar);
 				if (sendAvatar.data.isSet) {
 					console.log("avatar selection confirmed");
-					// navigate("/");
+					navigate("/");
 				} else {
 					toast.error(
 						"Error when setting avatar, please try again",
@@ -89,7 +90,7 @@ export default function Avatar() {
 		<>
 			{isLoading ? (
 				<Container>
-					<img src="" alt="loading" className="Loader" />
+					<img src={loading} alt="loading" className="Loader" />
 				</Container>
 			) : (
 				<Container>

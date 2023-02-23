@@ -29,6 +29,8 @@ const MainPage = () => {
 		const user = JSON.parse(localStorage.getItem("user"));
 		if (!user) {
 			navigate("/");
+		} else if (user.avatar === "") {
+			navigate("/setAvatar");
 		} else {
 			setCurrentUser(user);
 			console.log(currentUser);

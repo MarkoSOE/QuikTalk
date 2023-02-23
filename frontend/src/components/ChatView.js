@@ -43,11 +43,17 @@ const ChatView = ({ currentUser }) => {
 		};
 	}, []);
 
-	//get all messages
+	//get all messages and avatar data
 	const fetchAllMessages = async () => {
 		if (!selectedChat) return;
 		try {
 			const { data } = await axios.get(`/message/${selectedChat?._id}`);
+
+			//find the user ID's specific to the selected conversation
+			const conversationUsers = await axios.get(
+				`/conversation/getUserAvatars/:${selectedChat._id}`
+			);
+
 			setAllMessages(data);
 			socket.emit("join chat", selectedChat._id);
 		} catch (error) {

@@ -10,6 +10,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - Show notifications in the front end when errors occur during signup or login
 
+- fix skeleton loading on mainpage when user has no chats active
+
+- Chat bubbles don't stay in the container
+
+- instead of getting local user from localstorage want to use UseContext to set current user when user logs in or signs up
+
+- fix css for mobile view
+
+- Modal not working properly for creating groupchats
+
 ## Available Scripts
 
 In the project directory, you can run:

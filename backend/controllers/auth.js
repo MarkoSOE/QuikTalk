@@ -90,6 +90,7 @@ exports.postLogin = (req, res, next) => {
 				firstname: user.firstname,
 				lastname: user.lastname,
 				email: user.email,
+				avatar: user.avatar,
 			});
 		});
 	})(req, res, next);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import axios from "axios";
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,17 +7,22 @@ import "react-toastify/dist/ReactToastify.css";
 import Logo from "../assets/tailwind.png";
 import styled from "styled-components";
 import Cookies from "js-cookie";
+import ChatContext from "../ChatContext";
 
 export default function Login() {
+	//global states
+	const { currentUser, setCurrentUser } = useContext(ChatContext);
+
 	const toastOptions = {
 		position: "bottom-right",
 		autoClose: 8000,
-		pauseOnHover: true,
+		pauseOnHover: false,
 		draggable: true,
 		theme: "dark",
 	};
 	const navigate = useNavigate();
 
+	//local states
 	const [formData, setFormData] = useState({
 		email: "",
 		password: "",
@@ -69,10 +74,14 @@ export default function Login() {
 
 	// check to see if the user is aready logged in
 	useEffect(() => {
-		if (Cookies.get("userid")) {
+		const user = JSON.parse(localStorage.getItem("user"));
+		if (!user) {
+			navigate("/");
+		} else {
+			setCurrentUser(user);
 			navigate("/homepage");
 		}
-	}, [navigate]);
+	}, []);
 
 	return (
 		<>
