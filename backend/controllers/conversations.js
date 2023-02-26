@@ -97,7 +97,11 @@ exports.getUserAvatars = async (req, res) => {
 	console.log("getting user avatars");
 	console.log(req.params.id);
 	try {
-		const userAvatars = await Conversation.findById(req.params._id);
+		const userAvatars = await Conversation.findById(req.params.id).populate(
+			"users",
+			"-password"
+		);
+		console.log(userAvatars);
 		res.status(200).send(userAvatars);
 	} catch (error) {
 		console.error(error);

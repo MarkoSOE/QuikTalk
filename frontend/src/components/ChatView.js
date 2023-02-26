@@ -21,6 +21,7 @@ const ChatView = ({ currentUser }) => {
 	//local states
 	const [newMessage, setNewMessage] = useState("");
 	const [allMessages, setAllMessages] = useState();
+	const [conversationUsers, setConversationUsers] = useState({});
 	const [socketConnected, setSocketConnected] = useState(false);
 	const [typing, setTyping] = useState(false);
 	const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -44,17 +45,17 @@ const ChatView = ({ currentUser }) => {
 	}, []);
 
 	//get all messages and avatar data
+	//working so far, just need to get the create conversation working
+	//after, need to validate the user arrays return the correct collection data
 	const fetchAllMessages = async () => {
 		if (!selectedChat) return;
 		try {
-			//maybe I can make a promise chain parallel here?
-			const { data } = await axios.get(`/message/${selectedChat?._id}`);
+			const [{ data }, conversationUsers] = await Promise.all([
+				axios.get(`/message/${selectedChat?._id}`),
+				axios.get(`/conversation/getUserAvatars/${selectedChat._id}`),
+			]);
 
-			//find the user ID's specific to the selected conversation
-			const { conversationUsers } = await axios.get(
-				`/conversation/getUserAvatars/${selectedChat._id}`
-			);
-			console.log(conversationUsers);
+			setConversationUsers(conversationUsers);
 			setAllMessages(data);
 			socket.emit("join chat", selectedChat._id);
 		} catch (error) {
