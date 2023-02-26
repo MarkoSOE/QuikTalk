@@ -47,13 +47,14 @@ const ChatView = ({ currentUser }) => {
 	const fetchAllMessages = async () => {
 		if (!selectedChat) return;
 		try {
+			//maybe I can make a promise chain parallel here?
 			const { data } = await axios.get(`/message/${selectedChat?._id}`);
 
 			//find the user ID's specific to the selected conversation
-			const conversationUsers = await axios.get(
-				`/conversation/getUserAvatars/:${selectedChat._id}`
+			const { conversationUsers } = await axios.get(
+				`/conversation/getUserAvatars/${selectedChat._id}`
 			);
-
+			console.log(conversationUsers);
 			setAllMessages(data);
 			socket.emit("join chat", selectedChat._id);
 		} catch (error) {

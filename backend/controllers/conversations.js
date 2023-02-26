@@ -1,3 +1,4 @@
+const { ObjectId } = require("mongodb");
 const Conversation = require("../models/Conversation");
 const Message = require("../models/Message");
 const User = require("../models/User");
@@ -95,8 +96,10 @@ exports.getConversationById = async (req, res) => {
 exports.getUserAvatars = async (req, res) => {
 	console.log("getting user avatars");
 	console.log(req.params.id);
-	// try {
-	// 	const userAvatars = await Conversation.findById(req.params.id).lean();
-	// 	console.log(userAvatars);
-	// } catch (error) {}
+	try {
+		const userAvatars = await Conversation.findById(req.params._id);
+		res.status(200).send(userAvatars);
+	} catch (error) {
+		console.error(error);
+	}
 };
