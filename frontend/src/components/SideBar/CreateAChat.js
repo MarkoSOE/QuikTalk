@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import axios from "axios";
 import { useContext } from "react";
 import ChatContext from "../../ChatContext";
+import { useNavigate } from "react-router-dom";
 
 const CreateAChat = () => {
 	// const queryClient = UseQueryClient()
@@ -28,6 +29,8 @@ const CreateAChat = () => {
 
 	const [searchQuery, setSearchQuery] = useState("");
 	const [searchQueryResults, setSearchQueryResults] = useState([]);
+
+	const navigate = useNavigate();
 
 	// useEffect(() => {
 	//     setSearchQueryResults([])
@@ -106,6 +109,7 @@ const CreateAChat = () => {
 				users: JSON.stringify(selectedUsers.map((user) => user._id)),
 				user: currentUser,
 			});
+			navigate("/");
 		} catch (error) {
 			console.error(error);
 		}

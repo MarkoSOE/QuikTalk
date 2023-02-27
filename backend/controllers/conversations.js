@@ -22,7 +22,9 @@ exports.createConversation = async (req, res) => {
 	try {
 		const newConversation = await Conversation.create({
 			chatname: req.body.chatname,
-			isgroupchat: convoUsers.length < 3,
+			//functionality to be implemented later
+			// isgroupchat: convoUsers.length < 3,
+			isgroupchat: true,
 			users: convoUsers,
 			grouphost: req.body.user,
 		});
@@ -95,13 +97,11 @@ exports.getConversationById = async (req, res) => {
 
 exports.getUserAvatars = async (req, res) => {
 	console.log("getting user avatars");
-	console.log(req.params.id);
 	try {
 		const userAvatars = await Conversation.findById(req.params.id).populate(
 			"users",
 			"-password"
 		);
-		console.log(userAvatars);
 		res.status(200).send(userAvatars);
 	} catch (error) {
 		console.error(error);

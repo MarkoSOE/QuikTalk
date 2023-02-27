@@ -21,7 +21,7 @@ const ChatView = ({ currentUser }) => {
 	//local states
 	const [newMessage, setNewMessage] = useState("");
 	const [allMessages, setAllMessages] = useState();
-	const [conversationUsers, setConversationUsers] = useState({});
+	const [conversationAvatars, setConversationAvatars] = useState([]);
 	const [socketConnected, setSocketConnected] = useState(false);
 	const [typing, setTyping] = useState(false);
 	const [arrivalMessage, setArrivalMessage] = useState(null);
@@ -54,8 +54,10 @@ const ChatView = ({ currentUser }) => {
 				axios.get(`/message/${selectedChat?._id}`),
 				axios.get(`/conversation/getUserAvatars/${selectedChat._id}`),
 			]);
-
-			setConversationUsers(conversationUsers);
+			let avatars = conversationUsers.data.users.map((user) => {
+				return user.avatar;
+			});
+			setConversationAvatars(avatars);
 			setAllMessages(data);
 			socket.emit("join chat", selectedChat._id);
 		} catch (error) {

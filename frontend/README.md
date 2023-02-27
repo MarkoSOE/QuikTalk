@@ -18,7 +18,9 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 - fix css for mobile view
 
-- Modal not working properly for creating groupchats
+- Modal not working properly for creating groupchats (fixed)
+
+- Find a use for groupchat functionality (use all avatar images in the sidebar if its a groupchat but just one persons if it's a single person chat room)
 
 ## Available Scripts
 

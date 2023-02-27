@@ -61,6 +61,7 @@ const Messages = () => {
 	};
 
 	//here we want to get all the conversations that belong to the logged in user
+	//IM GETTING AN ERROR IMPORTING THE THIRD CONVO BECAUSE IT'S NOT A GROUPchat
 	useEffect(() => {
 		try {
 			const getChat = async () => {
