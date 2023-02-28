@@ -16,6 +16,7 @@ export function ChatProvider({ children }) {
 	const [width, setWidth] = useState(window.innerWidth);
 	const [profile, setProfile] = useState();
 	const [currentUser, setCurrentUser] = useState("");
+	const [messages, setMessages] = useState(false);
 
 	return (
 		<ChatContext.Provider
@@ -46,6 +47,8 @@ export function ChatProvider({ children }) {
 				setProfile,
 				currentUser,
 				setCurrentUser,
+				messages,
+				setMessages,
 			}}
 		>
 			{children}

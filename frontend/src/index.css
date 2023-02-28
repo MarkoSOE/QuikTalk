@@ -995,10 +995,11 @@ aside {
 
 .conversation-date {
 	display: flex;
+	text-align: left;
 	flex-direction: column;
 	align-items: flex-end;
 	justify-content: flex-start;
-	width: 5.3rem;
+	width: 10.3rem;
 	height: 100%;
 	color: rgb(152, 152, 158);
 }

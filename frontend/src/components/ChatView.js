@@ -16,6 +16,8 @@ const ChatView = ({ currentUser }) => {
 		setShowChatBox,
 		setShowMessageList,
 		setSelectedChat,
+		messages,
+		setMessages,
 	} = useContext(ChatContext);
 
 	//local states
@@ -55,6 +57,7 @@ const ChatView = ({ currentUser }) => {
 				axios.get(`/conversation/getUserAvatars/${selectedChat._id}`),
 			]);
 			let avatars = conversationUsers.data.users.map((user) => {
+				// return user.avatar.slice(26);
 				return user.avatar;
 			});
 			setConversationAvatars(avatars);
@@ -78,6 +81,7 @@ const ChatView = ({ currentUser }) => {
 				});
 				setNewMessage("");
 				setTyping(false);
+				setMessages(!messages);
 				socket.emit("new message", data);
 				setAllMessages([...allMessages, data.data]);
 			} catch (error) {
@@ -149,6 +153,22 @@ const ChatView = ({ currentUser }) => {
 						{selectedChat?.isgroupchat ? (
 							<div className="group-chat-wrapper">
 								<div className="group-chat-icon-wrapper">
+									{conversationAvatars.map((avatar, index) => {
+										return (
+											<>
+												<span className="group-chat-user-profile" key={index}>
+													<img
+														src={`data:image/svg+xml;base64,${avatar}`}
+														alt=""
+														width="100"
+														height="100"
+													/>
+												</span>
+											</>
+										);
+									})}
+									{/* 									
+									
 									<span className="group-chat-user-profile">
 										Profile Picture 1
 									</span>
@@ -157,7 +177,7 @@ const ChatView = ({ currentUser }) => {
 									</span>
 									<div className="avatar group-circle">
 										<span className="group-count">some count</span>
-									</div>
+									</div> */}
 								</div>
 								<h1 className="group-chat-name">
 									{selectedChat?.chatname.length > 21

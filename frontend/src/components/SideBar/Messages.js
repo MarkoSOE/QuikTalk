@@ -13,9 +13,9 @@ const Messages = () => {
 		userIsTyping,
 		currentUser,
 		setCurrentUser,
+		messages,
+		setMessages,
 	} = useContext(ChatContext);
-
-	const [test, setTest] = useState([]);
 
 	const currentTime = new Date();
 
@@ -55,13 +55,14 @@ const Messages = () => {
 			return "1 month ago";
 		} else if (months < 12) {
 			return months + " months ago";
-		} else {
+		} else if (months >= 12) {
 			return years + " years ago";
+		} else {
+			return "";
 		}
 	};
 
 	//here we want to get all the conversations that belong to the logged in user
-	//IM GETTING AN ERROR IMPORTING THE THIRD CONVO BECAUSE IT'S NOT A GROUPchat
 	useEffect(() => {
 		try {
 			const getChat = async () => {
@@ -77,7 +78,7 @@ const Messages = () => {
 		} catch (error) {
 			console.error(error);
 		}
-	}, []);
+	}, [messages]);
 
 	//want to get a conversation by id and setSelectedChat to that conversation
 	const openChat = async (id) => {
@@ -165,11 +166,20 @@ const Messages = () => {
 						</h6>
 					)}
 					<span className="conversation-brief">
-						{chat?.isgroupchat ? chat?.latestmessage?.createdby?.firstname : ""}{" "}
+						{/* if the latest message exists chat?.latestmessage then we put in the data below, otherwise we keep it blank */}
+						{chat?.latestmessage
+							? `${chat.latestmessage?.createdby?.firstname} : ${chat?.latestmessage?.message}`
+							: ""}
+
+						{/* MIGHT IMPLETEMENT BELOW IF I WANT TO INCLUDE A ISTYPING FUNCTION WITH socket */}
+						{/* 												
+						{chat?.latestmessage?.createdby?.firstname
+							? chat?.latestmessage?.createdby?.firstname
+							: ""}{" "}
 						:
 						{userIsTyping[chat?._id]
 							? "Typing..."
-							: getMessage(chat?.latestmessage?.message)}
+							: getMessage(chat?.latestmessage?.message)} */}
 					</span>
 				</div>
 				<div className="conversation-date">
