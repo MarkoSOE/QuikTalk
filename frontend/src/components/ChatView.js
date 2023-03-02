@@ -3,6 +3,7 @@ import { useState, useEffect, useContext, useRef, useCallback } from "react";
 import axios from "axios";
 import DisplayMessage from "../components/Chat/DisplayMessage";
 import io from "socket.io-client";
+import ConvertToImageFormat from "../tools/base64decodesvg";
 
 var selectedChatCompare;
 
@@ -57,7 +58,6 @@ const ChatView = ({ currentUser }) => {
 				axios.get(`/conversation/getUserAvatars/${selectedChat._id}`),
 			]);
 			let avatars = conversationUsers.data.users.map((user) => {
-				// return user.avatar.slice(26);
 				return user.avatar;
 			});
 			setConversationAvatars(avatars);
@@ -157,12 +157,7 @@ const ChatView = ({ currentUser }) => {
 										return (
 											<>
 												<span className="group-chat-user-profile" key={index}>
-													<img
-														src={`data:image/svg+xml;base64,${avatar}`}
-														alt=""
-														width="100"
-														height="100"
-													/>
+													<img src={avatar} alt="" width="100" height="100" />
 												</span>
 											</>
 										);
