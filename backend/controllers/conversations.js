@@ -22,8 +22,6 @@ exports.createConversation = async (req, res) => {
 	try {
 		const newConversation = await Conversation.create({
 			chatname: req.body.chatname,
-			//functionality to be implemented later
-			// isgroupchat: convoUsers.length < 3,
 			isgroupchat: true,
 			users: convoUsers,
 			grouphost: req.body.user,
@@ -41,18 +39,6 @@ exports.createConversation = async (req, res) => {
 	}
 };
 
-// exports.getAllConversations = async (req, res) => {
-// 	try {
-// 		const conversations = await Conversation.find()
-// 			.sort({ createdAt: "desc" })
-// 			.lean();
-// 		console.log(conversations);
-// 		res.status(200).send(conversations);
-// 	} catch (error) {
-// 		console.error(error);
-// 	}
-// };
-
 exports.getAllConversations = async (req, res) => {
 	console.log("getting all conversations");
 	try {
@@ -65,15 +51,13 @@ exports.getAllConversations = async (req, res) => {
 				data = await User.populate(data, {
 					path: "latestmessage.sender",
 					select: "-password",
-				})
-					//want to convert the latestmessage.createdby to the user's name
-					.then(async (data) => {
-						data = await User.populate(data, {
-							path: "latestmessage.createdby",
-							select: "-password",
-						});
-						res.status(200).send(data);
+				}).then(async (data) => {
+					data = await User.populate(data, {
+						path: "latestmessage.createdby",
+						select: "-password",
 					});
+					res.status(200).send(data);
+				});
 			})
 			.catch((err) => {
 				console.error(err);

@@ -3,12 +3,11 @@
 import React from "react";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
-import { Link, redirect, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useContext } from "react";
 import ChatContext from "../ChatContext";
 import { toast, ToastContainer } from "react-toastify";
-import { Buffer } from "buffer";
 import getImageDataURL from "../tools/svgBase64";
 import loading from "../assets/loading_gif.gif";
 

@@ -1,6 +1,5 @@
 import "./index.css";
-import { useState } from "react";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import MainPage from "./pages/MainPage";

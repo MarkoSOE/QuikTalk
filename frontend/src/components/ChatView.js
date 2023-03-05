@@ -1,9 +1,8 @@
 import ChatContext from "../ChatContext";
-import { useState, useEffect, useContext, useRef, useCallback } from "react";
+import { useState, useEffect, useContext, useRef } from "react";
 import axios from "axios";
 import DisplayMessage from "../components/Chat/DisplayMessage";
 import io from "socket.io-client";
-import ConvertToImageFormat from "../tools/base64decodesvg";
 
 var selectedChatCompare;
 
@@ -11,15 +10,7 @@ const socket = io("http://localhost:3001");
 
 const ChatView = ({ currentUser }) => {
 	//global states
-	const {
-		selectedChat,
-		setUserIsTyping,
-		setShowChatBox,
-		setShowMessageList,
-		setSelectedChat,
-		messages,
-		setMessages,
-	} = useContext(ChatContext);
+	const { selectedChat, messages, setMessages } = useContext(ChatContext);
 
 	//local states
 	const [newMessage, setNewMessage] = useState("");
@@ -27,7 +18,6 @@ const ChatView = ({ currentUser }) => {
 	const [conversationAvatars, setConversationAvatars] = useState([]);
 	const [socketConnected, setSocketConnected] = useState(false);
 	const [typing, setTyping] = useState(false);
-	const [arrivalMessage, setArrivalMessage] = useState(null);
 
 	const scrollRef = useRef();
 
@@ -47,9 +37,6 @@ const ChatView = ({ currentUser }) => {
 		};
 	}, []);
 
-	//get all messages and avatar data
-	//working so far, just need to get the create conversation working
-	//after, need to validate the user arrays return the correct collection data
 	const fetchAllMessages = async () => {
 		if (!selectedChat) return;
 		try {
@@ -116,13 +103,6 @@ const ChatView = ({ currentUser }) => {
 		setNewMessage(e.target.value);
 	};
 
-	const handleBackButton = () => {
-		setShowChatBox(false);
-		setShowMessageList(false);
-		setSelectedChat("");
-		setNewMessage();
-	};
-
 	const getSenderName = (currentUser, chat) => {
 		const [user1, user2] = chat?.users;
 		return chat?.users?.[0]._id !== currentUser
@@ -135,21 +115,6 @@ const ChatView = ({ currentUser }) => {
 			{selectedChat ? (
 				<>
 					<div className="current-msg-top-bar">
-						<svg
-							onClick={handleBackButton}
-							xmlns="http://www.w3.org/2000/svg"
-							fill="none"
-							viewBox="0 0 24 24"
-							strokeWidth="1.5"
-							stroke="white"
-							className="w-6 h-6"
-						>
-							<path
-								strokeLinecap="round"
-								strokeLinejoin="round"
-								d="M9 15L3 9m0 0l6-6M3 9h12a6 6 0 010 12h-3"
-							/>
-						</svg>
 						{selectedChat?.isgroupchat ? (
 							<div className="group-chat-wrapper">
 								<div className="group-chat-icon-wrapper">
@@ -157,22 +122,17 @@ const ChatView = ({ currentUser }) => {
 										return (
 											<>
 												<span className="group-chat-user-profile" key={index}>
-													<img src={avatar} alt="" width="100" height="100" />
+													<img
+														src={avatar}
+														alt=""
+														width="100"
+														height="100"
+														key={index}
+													/>
 												</span>
 											</>
 										);
 									})}
-									{/* 									
-									
-									<span className="group-chat-user-profile">
-										Profile Picture 1
-									</span>
-									<span className="group-chat-user-profile">
-										Profile Picture 2
-									</span>
-									<div className="avatar group-circle">
-										<span className="group-count">some count</span>
-									</div> */}
 								</div>
 								<h1 className="group-chat-name">
 									{selectedChat?.chatname.length > 21
@@ -182,6 +142,21 @@ const ChatView = ({ currentUser }) => {
 							</div>
 						) : (
 							<div className="single-chat-user-wrapper">
+								{conversationAvatars.map((avatar, index) => {
+									return (
+										<>
+											<span className="group-chat-user-profile" key={index}>
+												<img
+													src={avatar}
+													alt=""
+													width="100"
+													height="100"
+													key={index}
+												/>
+											</span>
+										</>
+									);
+								})}
 								<div className="single-chat-user-details">
 									<h5 className="single-chat-user-name">
 										{getSenderName(currentUser, selectedChat)}

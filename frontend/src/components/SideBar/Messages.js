@@ -9,23 +9,19 @@ const Messages = () => {
 		chats,
 		setChats,
 		setShowChatBox,
-		setShowMessageList,
-		userIsTyping,
 		currentUser,
-		setCurrentUser,
 		messages,
-		setMessages,
 	} = useContext(ChatContext);
 
 	const currentTime = new Date();
 
-	const getMessage = (message) => {
-		if (message?.length > 25) {
-			return message.substring(0, 25) + "...";
-		} else {
-			return message;
-		}
-	};
+	// const getMessage = (message) => {
+	// 	if (message?.length > 25) {
+	// 		return message.substring(0, 25) + "...";
+	// 	} else {
+	// 		return message;
+	// 	}
+	// };
 
 	//find the difference between the current time and the last message time
 	const latestMessageTime = (curentTime, messageSentTime) => {

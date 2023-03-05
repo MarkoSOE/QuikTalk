@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import Modal from "react-bootstrap/Modal";
 import axios from "axios";
@@ -9,21 +9,11 @@ import { useNavigate } from "react-router-dom";
 const CreateAChat = () => {
 	// const queryClient = UseQueryClient()
 
-	const {
-		currentUser,
-		setCurrentUser,
-		setShowModal,
-		setSelectedChat,
-		width,
-		setShowMessageList,
-		setShowChatBox,
-	} = useContext(ChatContext);
+	const { currentUser } = useContext(ChatContext);
 
 	const [show, setShow] = useState(false);
 	const handleClose = () => setShow(false);
-	const handleShow = () => setShow(true);
 
-	const [users, setUsers] = useState([]);
 	const [groupChatName, setGroupChatName] = useState("");
 	const [selectedUsers, setSelectedUsers] = useState([]);
 

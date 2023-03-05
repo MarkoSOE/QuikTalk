@@ -1233,7 +1233,7 @@ aside {
 	left: -7px;
 	height: 20px;
 	width: 20px;
-	background: #16191d;
+	background: #eee;
 	border-bottom-right-radius: 15px;
 }
 .yours .message.last:after {
@@ -1245,6 +1245,7 @@ aside {
 	width: 10px;
 	height: 20px;
 	background: #16191d;
+	/* background: #eee; */
 	border-bottom-right-radius: 10px;
 }
 

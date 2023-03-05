@@ -1,5 +1,4 @@
-import { useContext, useEffect, useRef, useState } from "react";
-import axios from "axios";
+import { useContext, useEffect } from "react";
 import "../index.css";
 import SideBar from "../components/SideBar";
 import ChatView from "../components/ChatView";
@@ -8,19 +7,8 @@ import { useNavigate } from "react-router-dom";
 
 const MainPage = () => {
 	//global states
-	const {
-		showModal,
-		showChatBox,
-		showMessageList,
-		width,
-		setWidth,
-		setShowChatBox,
-		setShowMessageList,
-		showEditModal,
-		showUserProfile,
-		currentUser,
-		setCurrentUser,
-	} = useContext(ChatContext);
+	const { showChatBox, showMessageList, currentUser, setCurrentUser } =
+		useContext(ChatContext);
 
 	const navigate = useNavigate();
 
