@@ -22,7 +22,7 @@ exports.createConversation = async (req, res) => {
 	try {
 		const newConversation = await Conversation.create({
 			chatname: req.body.chatname,
-			isgroupchat: true,
+			isgroupchat: convoUsers.length < 2,
 			users: convoUsers,
 			grouphost: req.body.user,
 		});
@@ -38,7 +38,6 @@ exports.createConversation = async (req, res) => {
 		console.error(error);
 	}
 };
-
 exports.getAllConversations = async (req, res) => {
 	console.log("getting all conversations");
 	try {

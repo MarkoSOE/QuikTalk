@@ -37,6 +37,7 @@ const ChatView = ({ currentUser }) => {
 		};
 	}, []);
 
+	//here I think I should filter out the logged in users avatar? or no? if I do, it makes it easier to add in the single user chat header
 	const fetchAllMessages = async () => {
 		if (!selectedChat) return;
 		try {
@@ -142,26 +143,31 @@ const ChatView = ({ currentUser }) => {
 							</div>
 						) : (
 							<div className="single-chat-user-wrapper">
-								{conversationAvatars.map((avatar, index) => {
-									return (
-										<>
-											<span className="group-chat-user-profile" key={index}>
-												<img
-													src={avatar}
-													alt=""
-													width="100"
-													height="100"
-													key={index}
-												/>
-											</span>
-										</>
-									);
-								})}
-								<div className="single-chat-user-details">
+								<div className="single-chat-icon-wrapper">
+									{conversationAvatars.map((avatar, index) => {
+										return (
+											<>
+												<span className="single-chat-sender-photo" key={index}>
+													<img
+														src={avatar}
+														alt=""
+														width="100"
+														height="100"
+														key={index}
+													/>
+												</span>
+											</>
+										);
+									})}
+								</div>
+								<h1 className="group-chat-name">
+									{getSenderName(currentUser, selectedChat)}
+								</h1>
+								{/* <div className="single-chat-user-details">
 									<h5 className="single-chat-user-name">
 										{getSenderName(currentUser, selectedChat)}
 									</h5>
-								</div>
+								</div> */}
 							</div>
 						)}
 					</div>

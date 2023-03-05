@@ -1107,8 +1107,16 @@ aside {
 }
 .single-chat-user-wrapper {
 	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-items: center;
+	width: inherit;
+	height: inherit;
+}
+
+.single-chat-icon-wrapper {
+	display: inline-flex;
+	flex-direction: row-reverse;
 }
 
 .single-chat-sender-photo {
