@@ -39,7 +39,10 @@ exports.getMessage = async (req, res) => {
 exports.getAllMessages = async (req, res) => {
 	console.log("getting all messages");
 	try {
-		let messages = await Message.find({ chatref: req.params.id });
+		let messages = await Message.find({ chatref: req.params.id }).populate(
+			"createdby",
+			"-password"
+		);
 		res.json(messages);
 	} catch (error) {
 		throw new Error(error.message);

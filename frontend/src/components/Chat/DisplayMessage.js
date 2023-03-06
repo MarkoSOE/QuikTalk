@@ -6,7 +6,7 @@ import React, {
 } from "react";
 import ChatContext from "../../ChatContext";
 
-const DisplayMessage = ({ messages, scrollRef }) => {
+const DisplayMessage = ({ messages, scrollRef, conversationAvatars }) => {
 	const currentTime = new Date();
 
 	const { selectedChat, userIsTyping } = useContext(ChatContext);
@@ -76,7 +76,7 @@ const DisplayMessage = ({ messages, scrollRef }) => {
 				messages.map((m, i) => {
 					return (
 						<div className="chat" key={i} ref={scrollRef}>
-							{m?.createdby === currentUserId ? (
+							{m?.createdby?._id === currentUserId ? (
 								<div className="mine messages" key={m?.createdby}>
 									<div className="message last" key={m?.createdby?._id}>
 										<span>{m?.message}</span>
@@ -90,6 +90,12 @@ const DisplayMessage = ({ messages, scrollRef }) => {
 									{isSamecreatedby(messages, m, i, currentUser) ||
 									isLastMessage(messages, i, currentUser) ? (
 										<>
+											{/* Put the image here */}
+											<img
+												className="chat-bubble-user"
+												src={m?.createdby?.avatar}
+												alt="avatar"
+											/>
 											<div className="message" key={m?.createdby?._id}>
 												<span>{m?.message}</span>
 											</div>

@@ -1,3 +1,8 @@
+// ------------------------------
+// Slight issue is that when another person from the same chat sends a message, the sidebar last message doesn't update. It only updates when the logged in user sends the last message
+
+// ------------------------------
+
 import { useContext, useEffect, useState } from "react";
 import ChatContext from "../../ChatContext";
 import axios from "axios";
@@ -14,14 +19,6 @@ const Messages = () => {
 	} = useContext(ChatContext);
 
 	const currentTime = new Date();
-
-	// const getMessage = (message) => {
-	// 	if (message?.length > 25) {
-	// 		return message.substring(0, 25) + "...";
-	// 	} else {
-	// 		return message;
-	// 	}
-	// };
 
 	//find the difference between the current time and the last message time
 	const latestMessageTime = (curentTime, messageSentTime) => {

@@ -176,7 +176,11 @@ const ChatView = ({ currentUser }) => {
 						)}
 					</div>
 					<div className="open-msg-box">
-						<DisplayMessage messages={allMessages} scrollRef={scrollRef} />
+						<DisplayMessage
+							messages={allMessages}
+							scrollRef={scrollRef}
+							conversationAvatars={conversationAvatars}
+						/>
 					</div>
 					<div className="message-status">
 						<p> </p>
