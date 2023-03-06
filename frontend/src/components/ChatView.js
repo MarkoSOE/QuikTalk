@@ -45,8 +45,14 @@ const ChatView = ({ currentUser }) => {
 				axios.get(`/message/${selectedChat?._id}`),
 				axios.get(`/conversation/getUserAvatars/${selectedChat._id}`),
 			]);
+			//remove currentuser avatar from the array (there has to be a better way of doing this)
 			let avatars = conversationUsers.data.users.map((user) => {
-				return user.avatar;
+				if (user.avatar !== currentUser.avatar) {
+					return user.avatar;
+				}
+			});
+			avatars = avatars.filter((avatar) => {
+				return avatar !== undefined;
 			});
 			setConversationAvatars(avatars);
 			setAllMessages(data);
@@ -160,9 +166,7 @@ const ChatView = ({ currentUser }) => {
 										);
 									})}
 								</div>
-								<h1 className="group-chat-name">
-									{getSenderName(currentUser, selectedChat)}
-								</h1>
+								<h1 className="single-chat-user-name">testing</h1>
 								{/* <div className="single-chat-user-details">
 									<h5 className="single-chat-user-name">
 										{getSenderName(currentUser, selectedChat)}

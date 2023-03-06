@@ -1087,7 +1087,7 @@ aside {
 	padding: 0 1.5rem;
 	display: flex;
 	align-items: center;
-	flex-direction: row;
+	flex-direction: column;
 }
 
 .top-bar-msg-icon {
@@ -1106,24 +1106,27 @@ aside {
 	display: none;
 }
 .single-chat-user-wrapper {
+	height: 100%;
 	display: flex;
 	flex-direction: column;
-	justify-content: center;
 	align-items: center;
-	width: inherit;
-	height: inherit;
-}
-
-.single-chat-icon-wrapper {
-	display: inline-flex;
-	flex-direction: row-reverse;
+	justify-content: center;
 }
 
 .single-chat-sender-photo {
-	width: 6.5rem;
-	height: 6.5rem;
-	object-fit: cover;
+	position: relative;
+	border: 4px solid #1c1d21;
 	border-radius: 50%;
+	overflow: hidden;
+	width: 100%;
+	height: 100%;
+}
+
+.single-chat-sender-photo img {
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+	display: block;
 }
 
 .single-chat-user-details {
@@ -1132,6 +1135,13 @@ aside {
 	margin-left: 0.75rem;
 	text-align: start;
 	line-height: 1.2;
+}
+
+.single-chat-icon-wrapper {
+	height: 4.5rem;
+	width: auto;
+	display: flex;
+	flex-direction: row;
 }
 
 .single-chat-user-name,
@@ -1159,14 +1169,15 @@ aside {
 /*Group Chat ICON */
 
 .group-chat-icon-wrapper {
+	height: 4.5rem;
+	width: auto;
 	display: inline-flex;
 	flex-direction: row-reverse;
-	width: 45px;
-	height: 4.5rem;
-	margin-right: 7.4rem;
+	/* margin-left: 4rem; */
 }
 
 .group-chat-user-profile {
+	flex-wrap: wrap;
 	position: relative;
 	border: 4px solid #1c1d21;
 	border-radius: 50%;
@@ -1176,13 +1187,13 @@ aside {
 }
 
 .group-chat-user-profile:not(:last-child) {
-	margin-left: -79px;
+	margin-left: -20px;
 }
 
 .group-chat-user-profile img {
 	width: 100%;
 	height: 100%;
-	object-fit: cover;
+	object-fit: fill;
 	display: block;
 }
 
@@ -1241,7 +1252,7 @@ aside {
 	left: -7px;
 	height: 20px;
 	width: 20px;
-	background: #eee;
+	background: #16191d;
 	border-bottom-right-radius: 15px;
 }
 .yours .message.last:after {
@@ -1253,7 +1264,6 @@ aside {
 	width: 10px;
 	height: 20px;
 	background: #16191d;
-	/* background: #eee; */
 	border-bottom-right-radius: 10px;
 }
 
