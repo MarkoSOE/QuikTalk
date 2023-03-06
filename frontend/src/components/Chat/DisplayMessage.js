@@ -68,6 +68,8 @@ const DisplayMessage = ({ messages, scrollRef }) => {
 		}
 	};
 
+	// Add in user avatars right next to the chat bubble when it's a groupchat to know who sent the message
+
 	return (
 		<div className="all-msg-container">
 			{messages &&

@@ -135,8 +135,8 @@ const Messages = () => {
 							xmlns="http://www.w3.org/2000/svg"
 							fill="none"
 							viewBox="0 0 24 24"
-							strokeWidth="1.5"
-							stroke="currentColor"
+							strokeWidth={1.5}
+							stroke="white"
 							className="w-6 h-6"
 						>
 							<path
@@ -150,9 +150,10 @@ const Messages = () => {
 				<div className="conversation-info">
 					{!chat.isgroupchat ? (
 						<h6 className="conversation-sender">
-							{/* {getSenderName(loggedUserID, chat).length > 20
-								? getSenderName(loggedUserID, chat).substring(0, 20) + "..."
-								: getSenderName(loggedUserID, chat)} */}
+							{/* want this to be the other person in the conversations name */}
+							{chat?.chatname.length > 20
+								? chat?.chatname.substring(0, 20) + ".."
+								: chat?.chatname}
 						</h6>
 					) : (
 						<h6 className="conversation-sender">
