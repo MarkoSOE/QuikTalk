@@ -77,38 +77,37 @@ const DisplayMessage = ({ messages, scrollRef, conversationAvatars }) => {
 					return (
 						<div className="chat" key={i} ref={scrollRef}>
 							{m?.createdby?._id === currentUserId ? (
-								<div className="mine messages" key={m?.createdby}>
-									<div className="message last" key={m?.createdby?._id}>
+								<div className="message-right-side" key={m?.createdby}>
+									<div className="message-body self" key={m?.createdby?._id}>
 										<span>{m?.message}</span>
 									</div>
-									<span className="chat-bubble-time-right">
+									<span className="message-date">
 										{getTimeofMessage(new Date(m?.createdAt))}
 									</span>
 								</div>
 							) : (
-								<div className="yours messages" key={m?.createdby}>
+								<div className="" key={m?.createdby}>
 									{isSamecreatedby(messages, m, i, currentUser) ||
 									isLastMessage(messages, i, currentUser) ? (
 										<>
-											{/* Put the image here */}
 											<img
 												className="chat-bubble-user"
 												src={m?.createdby?.avatar}
 												alt="avatar"
 											/>
-											<div className="message" key={m?.createdby?._id}>
+											<div className="" key={m?.createdby?._id}>
 												<span>{m?.message}</span>
 											</div>
-											<span className="chat-bubble-time-right">
+											<span className="">
 												{getTimeofMessage(new Date(m?.createdAt))}
 											</span>
 										</>
 									) : (
 										<>
-											<div className="message last" key={m?.createdby?._id}>
+											<div className="" key={m?.createdby?._id}>
 												<span>{m?.message}</span>
 											</div>
-											<span className="chat-bubble-time-right">
+											<span className="">
 												{getTimeofMessage(new Date(m?.createdAt))}
 											</span>
 										</>

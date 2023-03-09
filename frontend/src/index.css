@@ -1221,13 +1221,36 @@ aside {
 	padding: 10px;
 }
 
-.messages {
+.message-right-side {
 	margin-top: 30px;
 	display: flex;
 	flex-direction: column;
+	justify-content: flex-end;
 }
 
-.message {
+.message-body {
+	border-radius: 20px;
+	padding: 8px 15px;
+	margin-top: 5px;
+	margin-bottom: 5px;
+	display: inline-block;
+}
+
+.self {
+	margin-left: 75%;
+	background-color: #1982fc;
+	color: #eee;
+	position: relative;
+}
+
+.message-date {
+	text-align: end;
+	margin-right: 1%;
+	color: #606060;
+	font-size: 1.2rem;
+}
+
+/* .message {
 	border-radius: 20px;
 	padding: 8px 15px;
 	margin-top: 5px;
@@ -1253,7 +1276,7 @@ aside {
 	left: -7px;
 	height: 20px;
 	width: 20px;
-	/* background: #16191d; */
+	background: #16191d;
 	background: #eee;
 	border-bottom-right-radius: 15px;
 }
@@ -1311,7 +1334,7 @@ aside {
 	bottom: 50px;
 	font-size: 13px;
 	font-style: italic;
-}
+} */
 
 /* End of Testing Chats */
 
