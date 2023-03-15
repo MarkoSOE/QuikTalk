@@ -68,25 +68,33 @@ const DisplayMessage = ({ messages, scrollRef, conversationAvatars }) => {
 		}
 	};
 
-	// Add in user avatars right next to the chat bubble when it's a groupchat to know who sent the message
-
+	//found the issue. Message array elements used to have a createdby._id but now it just has createdby, there is no object being referenced in createdby. No this isn't true, the reason this happens is because socket or something isn't allowing the createdby userID to be properly populated with user data from the user Model, resulting in only the createdby property to be a objectid, not an object with the ObjectID in it.
 	return (
 		<div className="all-msg-container">
 			{messages &&
 				messages.map((m, i) => {
 					return (
 						<div className="chat" key={i} ref={scrollRef}>
-							{m?.createdby?._id === currentUserId ? (
-								<div className="message-right-side" key={m?.createdby}>
-									<div className="message-body self" key={m?.createdby?._id}>
-										<span>{m?.message}</span>
+							{m?.createdby?._id === currentUserId ||
+							m?.createdby === currentUserId ? (
+								<div
+									className="chat-msg-container right-side"
+									key={m?.createdby?._id}
+								>
+									<div className="message-right-side" key={m?.createdby}>
+										<div className="message-body self" key={m?.createdby?._id}>
+											<span>{m?.message}</span>
+										</div>
+										<span className="message-date-right">
+											{getTimeofMessage(new Date(m?.createdAt))}
+										</span>
 									</div>
-									<span className="message-date">
-										{getTimeofMessage(new Date(m?.createdAt))}
-									</span>
 								</div>
 							) : (
-								<div className="" key={m?.createdby}>
+								<div
+									className="chat-msg-container left-side"
+									key={m?.createdby}
+								>
 									{isSamecreatedby(messages, m, i, currentUser) ||
 									isLastMessage(messages, i, currentUser) ? (
 										<>
@@ -95,22 +103,22 @@ const DisplayMessage = ({ messages, scrollRef, conversationAvatars }) => {
 												src={m?.createdby?.avatar}
 												alt="avatar"
 											/>
-											<div className="" key={m?.createdby?._id}>
-												<span>{m?.message}</span>
+											<div className="message-contents">
+												<div
+													className="message-body other"
+													key={m?.createdby?._id}
+												>
+													<span>{m?.message}</span>
+												</div>
+												<span className="message-date-left">
+													{getTimeofMessage(new Date(m?.createdAt))}
+												</span>
 											</div>
-											<span className="">
-												{getTimeofMessage(new Date(m?.createdAt))}
-											</span>
 										</>
 									) : (
-										<>
-											<div className="" key={m?.createdby?._id}>
-												<span>{m?.message}</span>
-											</div>
-											<span className="">
-												{getTimeofMessage(new Date(m?.createdAt))}
-											</span>
-										</>
+										<div className="message-contents">
+											<span className="message-body self">{m?.message}</span>
+										</div>
 									)}
 								</div>
 							)}

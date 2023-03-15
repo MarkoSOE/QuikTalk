@@ -160,7 +160,6 @@ const Messages = () => {
 						</h6>
 					)}
 					<span className="conversation-brief">
-						{/* if the latest message exists chat?.latestmessage then we put in the data below, otherwise we keep it blank */}
 						{chat?.latestmessage
 							? `${chat.latestmessage?.createdby?.firstname} : ${chat?.latestmessage?.message}`
 							: ""}
