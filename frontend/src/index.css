@@ -1611,7 +1611,7 @@ aside {
 
 .send-btn {
 	width: 3.6rem;
-	height: 3rem;
+	height: 3.6rem;
 	border-radius: 100%;
 	border: none;
 	background-color: #0b93f6;
@@ -1993,6 +1993,10 @@ label {
 
 /*Mobile and other Devices */
 @media screen and (max-width: 930px) {
+	/* .app {
+		height: 100vh;
+	} */
+
 	.back-btn {
 		display: block;
 	}
@@ -2019,6 +2023,16 @@ label {
 	.app,
 	.chat-box {
 		padding: 0;
+		width: 0%;
+	}
+
+	.app,
+	.unopened-chat-container {
+		display: none;
+	}
+
+	.unopened-chat-title {
+		display: none;
 	}
 }
 
