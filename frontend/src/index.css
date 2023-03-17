@@ -2019,7 +2019,7 @@ label {
 	.open-msg-box {
 		height: calc(100vh - 13rem);
 	}
-
+	/* 
 	.app,
 	.chat-box {
 		padding: 0;
@@ -2033,7 +2033,7 @@ label {
 
 	.unopened-chat-title {
 		display: none;
-	}
+	} */
 }
 
 @media screen and (max-width: 875px) {

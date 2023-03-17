@@ -4,11 +4,20 @@ import SideBar from "../components/SideBar";
 import ChatView from "../components/ChatView";
 import ChatContext from "../ChatContext";
 import { useNavigate } from "react-router-dom";
+import CreateAChat from "../components/SideBar/CreateAChat";
 
 const MainPage = () => {
 	//global states
-	const { showChatBox, showMessageList, currentUser, setCurrentUser } =
-		useContext(ChatContext);
+	const {
+		currentUser,
+		setCurrentUser,
+		showChatBox,
+		showMessageList,
+		width,
+		setWidth,
+		setShowChatBox,
+		setShowMessageList,
+	} = useContext(ChatContext);
 
 	const navigate = useNavigate();
 
@@ -25,9 +34,31 @@ const MainPage = () => {
 		}
 	}, []);
 
+	// Rendering components from viewport width
+
+	useEffect(() => {
+		const handleResizeWindow = () => {
+			setWidth(window.innerWidth);
+		};
+		if (width < 930) {
+			setShowChatBox(false);
+			setShowMessageList(false);
+		}
+		if (width > 930) {
+			setShowChatBox(true);
+			setShowMessageList(true);
+		}
+		window.addEventListener("resize", handleResizeWindow);
+
+		return () => {
+			window.removeEventListener("resize", handleResizeWindow);
+		};
+	});
+
 	return (
 		<main className="homepage">
 			{showMessageList && <SideBar />}
+			{/* {showChatBox && <CreateAChat />} */}
 			{showChatBox && <ChatView currentUser={currentUser} />}
 		</main>
 	);

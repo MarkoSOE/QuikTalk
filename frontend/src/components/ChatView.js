@@ -10,7 +10,16 @@ const socket = io("http://localhost:3001");
 
 const ChatView = ({ currentUser }) => {
 	//global states
-	const { selectedChat, messages, setMessages } = useContext(ChatContext);
+	const {
+		selectedChat,
+		messages,
+		setMessages,
+		setShowChatBox,
+		setShowMessageList,
+		setSelectedChat,
+		width,
+		setShowEditModal,
+	} = useContext(ChatContext);
 
 	//local states
 	const [newMessage, setNewMessage] = useState("");
@@ -116,6 +125,18 @@ const ChatView = ({ currentUser }) => {
 			? `${user1.firstname} ${user1.lastname}`
 			: `${user2.firstname} ${user2.lastname}`;
 	};
+
+	const handleBackButton = () => {
+		setShowChatBox(false);
+		setShowMessageList(true);
+		setSelectedChat("");
+		setNewMessage();
+	};
+
+	if (width > 930) {
+		setShowChatBox(true);
+		setShowMessageList(true);
+	}
 
 	return (
 		<main className="chat-box">

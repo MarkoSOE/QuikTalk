@@ -68,7 +68,6 @@ const DisplayMessage = ({ messages, scrollRef, conversationAvatars }) => {
 		}
 	};
 
-	//found the issue. Message array elements used to have a createdby._id but now it just has createdby, there is no object being referenced in createdby. No this isn't true, the reason this happens is because socket or something isn't allowing the createdby userID to be properly populated with user data from the user Model, resulting in only the createdby property to be a objectid, not an object with the ObjectID in it.
 	return (
 		<div className="all-msg-container">
 			{messages &&
