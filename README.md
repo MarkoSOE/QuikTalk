@@ -35,9 +35,9 @@ This project was heavily inspired by the widely popular messaging app - Telegram
 
 ## Features
 
-<img src="https://github.com/MarkoSOE/QuikTalk/blob/main/frontend/src/assets/GroupChat.png?raw=true" width="300px"><img src="https://github.com/MarkoSOE/QuikTalk/blob/main/frontend/src/assets/MessageList.png?raw=true" width="300px">
+- Mobile layout featuring Message timestamps, Avatar selection using multiavatar API, with future plans on implementing user typing animation, user online activity, and emoji support.
 
-- Mobile layout featuring Message timestamps, with future plans on implementing user typing animation, user online activity, and emoji support.
+<img src="https://github.com/MarkoSOE/QuikTalk/blob/main/frontend/src/assets/GroupChat.png?raw=true" width="300px"><img src="https://github.com/MarkoSOE/QuikTalk/blob/main/frontend/src/assets/MessageList.png?raw=true" width="300px">
 
 ## Future Optimizations:
 
