@@ -1214,10 +1214,9 @@ aside {
 /* END OF GROUPCHAT ICON */
 
 /* Loading screen */
-./* Follow me for more pens like this! */
 
 /* Center the planet */
-body {
+.body {
 	display: flex;
 	justify-content: center;
 	align-items: center;
