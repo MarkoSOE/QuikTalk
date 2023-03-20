@@ -89,7 +89,7 @@ export default function Avatar() {
 		<>
 			{isLoading ? (
 				<Container>
-					<img src={loading} alt="loading" className="Loader" />
+					<div class="planet"></div>
 				</Container>
 			) : (
 				<Container>
