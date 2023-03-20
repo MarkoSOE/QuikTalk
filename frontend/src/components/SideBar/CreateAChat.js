@@ -111,12 +111,12 @@ const CreateAChat = () => {
 				<Button variant="primary" onClick={getUsers}>
 					Create GroupChat
 				</Button>
-
 				<Modal
 					show={show}
 					onHide={handleClose}
 					backdrop="static"
 					keyboard={false}
+					className="w-full"
 				>
 					<Modal.Header closeButton>
 						<Modal.Title>Create a GroupChat</Modal.Title>

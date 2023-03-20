@@ -1643,9 +1643,9 @@ aside {
 }
 
 .modal-content {
-	max-width: 40rem;
-	min-height: 36rem;
-	margin: 0 1.5rem;
+	max-width: 90%;
+	min-height: 50%;
+	margin: 1.5rem;
 	background-color: rgb(19, 19, 21) !important;
 	border-radius: 1.5rem;
 	position: relative;

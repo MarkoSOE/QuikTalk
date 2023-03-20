@@ -42,7 +42,7 @@ const MainPage = () => {
 		};
 		if (width < 930) {
 			setShowChatBox(false);
-			setShowMessageList(false);
+			setShowMessageList(true);
 		}
 		if (width > 930) {
 			setShowChatBox(true);
