@@ -1,7 +1,7 @@
 {
 	"name": "frontend",
 	"version": "0.1.0",
-	"proxy": "https://quiktalkserver.onrender.com/",
+	"proxy": "https://quiktalkserver.onrender.com",
 	"private": true,
 	"dependencies": {
 		"@dicebear/collection": "^5.3.0",
