@@ -60,7 +60,11 @@ export default function Login() {
 					credentials: "include",
 				};
 				const body = JSON.stringify(newUser);
-				const data = await axios.post("/login", body, config);
+				const data = await axios.post(
+					"https://quiktalkserver.onrender.com/login",
+					body,
+					config
+				);
 				//store the user data in localstorage
 				localStorage.setItem("user", JSON.stringify(data.data));
 				//store the user as currentUser
