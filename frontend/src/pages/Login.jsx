@@ -68,7 +68,7 @@ export default function Login() {
 				//store the user data in localstorage
 				localStorage.setItem("user", JSON.stringify(data.data));
 				//store the user as currentUser
-				window.location.href = "/homepage";
+				window.location.href = "https://quiktalkclient.onrender.com/homepage";
 			} catch (error) {
 				console.error(error);
 				toast.error(`Invalid email or password`, toastOptions);
@@ -83,7 +83,7 @@ export default function Login() {
 			navigate("/");
 		} else {
 			setCurrentUser(user);
-			navigate("/homepage");
+			navigate("https://quiktalkclient.onrender.com/homepage");
 		}
 	}, []);
 
