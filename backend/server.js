@@ -16,7 +16,6 @@ const conversationRoutes = require("./routes/conversation");
 const http = require("http").Server(app);
 const PORT = process.env.PORT || 3001;
 
-const cors = require("cors");
 const corsOptions = require("./config/corsOptions");
 
 //Use .env file in config folder
