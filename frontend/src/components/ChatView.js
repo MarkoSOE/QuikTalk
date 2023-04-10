@@ -6,7 +6,7 @@ import io from "socket.io-client";
 
 var selectedChatCompare;
 
-const socket = io("http://localhost:3001");
+const socket = io("https://quiktalkclient.onrender.com/");
 
 const ChatView = ({ currentUser }) => {
 	//global states
@@ -51,8 +51,12 @@ const ChatView = ({ currentUser }) => {
 		if (!selectedChat) return;
 		try {
 			const [{ data }, conversationUsers] = await Promise.all([
-				axios.get(`/message/${selectedChat?._id}`),
-				axios.get(`/conversation/getUserAvatars/${selectedChat._id}`),
+				axios.get(
+					`https://quiktalkserver.onrender.com/message/${selectedChat?._id}`
+				),
+				axios.get(
+					`https://quiktalkserver.onrender.com/conversation/getUserAvatars/${selectedChat._id}`
+				),
 			]);
 			//remove currentuser avatar from the array (there has to be a better way of doing this)
 			let avatars = conversationUsers.data.users.map((user) => {
@@ -77,11 +81,14 @@ const ChatView = ({ currentUser }) => {
 		if (newMessage.trim().length === 0) return;
 		if (newMessage) {
 			try {
-				const data = await axios.post("/message/createMessage", {
-					user: currentUser,
-					message: newMessage,
-					chatID: selectedChat?._id,
-				});
+				const data = await axios.post(
+					"https://quiktalkserver.onrender.com/message/createMessage",
+					{
+						user: currentUser,
+						message: newMessage,
+						chatID: selectedChat?._id,
+					}
+				);
 				setNewMessage("");
 				setTyping(false);
 				setMessages(!messages);

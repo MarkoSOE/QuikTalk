@@ -32,9 +32,12 @@ const SideBar = () => {
 			//search for specific user
 			const fetchUsers = async () => {
 				try {
-					const { data } = await axios.get("/singleuser", {
-						firstname: search,
-					});
+					const { data } = await axios.get(
+						"https://quiktalkserver.onrender.com/singleuser",
+						{
+							firstname: search,
+						}
+					);
 					setSearchResult(data);
 				} catch (error) {
 					console.error(error);
@@ -53,7 +56,7 @@ const SideBar = () => {
 			await axios.get("/logout");
 			localStorage.removeItem("user");
 			setCurrentUser("");
-			navigate("/");
+			navigate("https://quiktalkserver.onrender.com/");
 		} catch (error) {
 			console.error(error);
 		}
