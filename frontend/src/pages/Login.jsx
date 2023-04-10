@@ -68,7 +68,7 @@ export default function Login() {
 				//store the user data in localstorage
 				localStorage.setItem("user", JSON.stringify(data.data));
 				//store the user as currentUser
-				window.location.href = "https://quiktalkclient.onrender.com/homepage";
+				window.location.href = "/homepage";
 			} catch (error) {
 				console.error(error);
 				toast.error(`Invalid email or password`, toastOptions);
@@ -83,7 +83,7 @@ export default function Login() {
 			navigate("/");
 		} else {
 			setCurrentUser(user);
-			navigate("https://quiktalkclient.onrender.com/homepage");
+			navigate("/homepage");
 		}
 	}, []);
 
@@ -97,7 +97,11 @@ export default function Login() {
 					</div>
 					<span>
 						{" "}
-						Don't have an account? <Link to="/Signup"> Create one</Link>{" "}
+						Don't have an account?{" "}
+						<Link to="https://quiktalkserver.onrender.com/Signup">
+							{" "}
+							Create one
+						</Link>{" "}
 					</span>
 					<input
 						type="text"

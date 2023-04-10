@@ -16,19 +16,16 @@ const conversationRoutes = require("./routes/conversation");
 const http = require("http").Server(app);
 const PORT = process.env.PORT || 3001;
 
+const cors = require("cors");
+const corsOptions = require("./config/corsOptions");
+
 //Use .env file in config folder
 require("dotenv").config({ path: "./config/.env" });
 
 // Passport config
 require("./config/passport")(passport);
 
-app.use(
-	cors({
-		origin: "http://locahost:3001",
-		methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
-		credentials: true,
-	})
-);
+app.use(cors(corsOptions));
 
 //Middleware that parses incoming JSON request and puts the data in req.body
 app.use(express.json());
